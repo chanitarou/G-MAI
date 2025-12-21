@@ -1,0 +1,7 @@
+postgres-data/
+elasticsearch-data/
+.git/
+node_modules/
+.venv/
+__pycache__/
+*.log

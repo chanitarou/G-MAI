@@ -1,0 +1,13 @@
+:root {
+    --bit-primary: #2563eb;
+    --bit-secondary: #0f172a;
+    --bit-accent: #ec4899;
+    --bit-bg: #f8fafc;
+}
+
+[data-theme='dark'] {
+    --bit-primary: #60a5fa;
+    --bit-secondary: #e2e8f0;
+    --bit-accent: #f472b6;
+    --bit-bg: #0f172a;
+}

@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2025-01-24T00:00:00.000Z" agent="Claude" version="24.7.8">
+  <diagram name="ECサイト注文処理業務フロー" id="ec-order-flow-001">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- ヘッダー -->
+        <mxCell id="header" value="ECサイト注文処理業務フロー　作成日：2025-01-24" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f0f0f0;strokeColor=none;fontSize=18;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="0" y="0" width="1200" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- スイムレーン：顧客 -->
+        <mxCell id="lane_customer" value="顧客" style="swimlane;startSize=60;fillColor=#fcfcfc;strokeColor=#ddd;fontStyle=1;fontSize=14;swimlaneFillColor=#e0e0e0;" vertex="1" parent="1">
+          <mxGeometry x="0" y="60" width="200" height="800" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="start" value="開始" style="ellipse;whiteSpace=wrap;html=1;fillColor=#2196F3;strokeColor=#0D47A1;strokeWidth=1.5;fontColor=#ffffff;fontStyle=1;fontSize=14;" vertex="1" parent="lane_customer">
+          <mxGeometry x="85" y="40" width="30" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="task_01" value="1. 商品選択" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;" vertex="1" parent="lane_customer">
+          <mxGeometry x="50" y="100" width="100" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="task_02" value="2. カート追加" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;" vertex="1" parent="lane_customer">
+          <mxGeometry x="50" y="170" width="100" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="task_03" value="3. 注文確定" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;" vertex="1" parent="lane_customer">
+          <mxGeometry x="50" y="240" width="100" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="task_04" value="4. 決済実行" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;" vertex="1" parent="lane_customer">
+          <mxGeometry x="50" y="310" width="100" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- スイムレーン：受付・窓口 -->
+        <mxCell id="lane_reception" value="受付・窓口" style="swimlane;startSize=60;fillColor=#fcfcfc;strokeColor=#ddd;fontStyle=1;fontSize=14;swimlaneFillColor=#e0e0e0;" vertex="1" parent="1">
+          <mxGeometry x="200" y="60" width="200" height="800" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="task_05" value="5. 注文受付" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;" vertex="1" parent="lane_reception">
+          <mxGeometry x="50" y="310" width="100" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="doc_01" value="注文書" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#FFF9C4;strokeColor=#FBC02D;fontSize=9;" vertex="1" parent="lane_reception">
+          <mxGeometry x="80" y="280" width="40" height="15" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="task_06" value="6. 決済確認" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;" vertex="1" parent="lane_reception">
+          <mxGeometry x="50" y="380" width="100" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="decision_01" value="決済\n成功？" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;fontSize=10;" vertex="1" parent="lane_reception">
+          <mxGeometry x="80" y="440" width="40" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="task_07" value="7. 注文承認" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;" vertex="1" parent="lane_reception">
+          <mxGeometry x="50" y="520" width="100" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="task_08" value="8. 顧客通知" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;" vertex="1" parent="lane_reception">
+          <mxGeometry x="50" y="590" width="100" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- スイムレーン：倉庫担当 -->
+        <mxCell id="lane_warehouse" value="倉庫担当" style="swimlane;startSize=60;fillColor=#fcfcfc;strokeColor=#ddd;fontStyle=1;fontSize=14;swimlaneFillColor=#e0e0e0;" vertex="1" parent="1">
+          <mxGeometry x="400" y="60" width="200" height="800" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="task_09" value="9. 在庫確認" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;" vertex="1" parent="lane_warehouse">
+          <mxGeometry x="50" y="520" width="100" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="decision_02" value="在庫\nあり？" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;fontSize=10;" vertex="1" parent="lane_warehouse">
+          <mxGeometry x="80" y="580" width="40" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="task_10" value="10. ピッキング" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;" vertex="1" parent="lane_warehouse">
+          <mxGeometry x="50" y="640" width="100" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="task_11" value="11. 梱包" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;" vertex="1" parent="lane_warehouse">
+          <mxGeometry x="50" y="700" width="100" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="doc_02" value="出荷票" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#FFF9C4;strokeColor=#FBC02D;fontSize=9;" vertex="1" parent="lane_warehouse">
+          <mxGeometry x="80" y="675" width="40" height="15" as="geometry" />
+        </mxCell>
+        
+        <!-- スイムレーン：配送管理 -->
+        <mxCell id="lane_shipping" value="配送管理" style="swimlane;startSize=60;fillColor=#fcfcfc;strokeColor=#ddd;fontStyle=1;fontSize=14;swimlaneFillColor=#e0e0e0;" vertex="1" parent="1">
+          <mxGeometry x="600" y="60" width="200" height="800" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="task_12" value="12. 配送手配" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;" vertex="1" parent="lane_shipping">
+          <mxGeometry x="50" y="700" width="100" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="task_13" value="13. 追跡番号\n発行" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;" vertex="1" parent="lane_shipping">
+          <mxGeometry x="50" y="760" width="100" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="end" value="完了" style="ellipse;whiteSpace=wrap;html=1;fillColor=#2196F3;strokeColor=#0D47A1;strokeWidth=1.5;fontColor=#ffffff;fontStyle=1;fontSize=14;" vertex="1" parent="lane_shipping">
+          <mxGeometry x="85" y="820" width="30" height="30" as="geometry" />
+        </mxCell>
+        
+        <!-- スイムレーン：システム -->
+        <mxCell id="lane_system" value="システム" style="swimlane;startSize=60;fillColor=#fcfcfc;strokeColor=#ddd;fontStyle=1;fontSize=14;swimlaneFillColor=#e0e0e0;" vertex="1" parent="1">
+          <mxGeometry x="800" y="60" width="200" height="800" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="db_01" value="商品DB" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;fillColor=#2196F3;strokeColor=#0D47A1;strokeWidth=2;fontColor=#ffffff;fontSize=12;fontStyle=1;" vertex="1" parent="lane_system">
+          <mxGeometry x="50" y="100" width="100" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="db_02" value="注文DB" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;fillColor=#2196F3;strokeColor=#0D47A1;strokeWidth=2;fontColor=#ffffff;fontSize=12;fontStyle=1;" vertex="1" parent="lane_system">
+          <mxGeometry x="50" y="250" width="100" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="db_03" value="決済DB" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;fillColor=#2196F3;strokeColor=#0D47A1;strokeWidth=2;fontColor=#ffffff;fontSize=12;fontStyle=1;" vertex="1" parent="lane_system">
+          <mxGeometry x="50" y="380" width="100" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="db_04" value="在庫DB" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;fillColor=#2196F3;strokeColor=#0D47A1;strokeWidth=2;fontColor=#ffffff;fontSize=12;fontStyle=1;" vertex="1" parent="lane_system">
+          <mxGeometry x="50" y="520" width="100" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="db_05" value="配送DB" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;fillColor=#2196F3;strokeColor=#0D47A1;strokeWidth=2;fontColor=#ffffff;fontSize=12;fontStyle=1;" vertex="1" parent="lane_system">
+          <mxGeometry x="50" y="700" width="100" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- 矢印：業務フロー -->
+        <mxCell id="edge_01" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="start" target="task_01">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge_02" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task_01" target="task_02">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge_03" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task_02" target="task_03">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge_04" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task_03" target="task_04">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge_05" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task_04" target="task_05">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="150" y="330" />
+              <mxPoint x="300" y="330" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="edge_06" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task_05" target="task_06">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge_07" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task_06" target="decision_01">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge_08" value="成功" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="decision_01" target="task_07">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-20" y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="edge_09" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task_07" target="task_08">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge_10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task_07" target="task_09">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="350" y="540" />
+              <mxPoint x="500" y="540" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="edge_11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task_09" target="decision_02">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge_12" value="あり" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="decision_02" target="task_10">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-10" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="edge_13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task_10" target="task_11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge_14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task_11" target="task_12">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="550" y="720" />
+              <mxPoint x="700" y="720" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="edge_15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task_12" target="task_13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge_16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task_13" target="end">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- 矢印：システム連携 -->
+        <mxCell id="sys_edge_01" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1E88E5;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task_01" target="db_01">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="150" y="120" />
+              <mxPoint x="850" y="120" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="sys_edge_02" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1E88E5;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task_03" target="db_02">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="150" y="260" />
+              <mxPoint x="850" y="260" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="sys_edge_03" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1E88E5;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task_06" target="db_03">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="350" y="400" />
+              <mxPoint x="850" y="400" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="sys_edge_04" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1E88E5;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task_09" target="db_04">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="550" y="540" />
+              <mxPoint x="850" y="540" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="sys_edge_05" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1E88E5;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task_12" target="db_05">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="750" y="720" />
+              <mxPoint x="850" y="720" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- エラー処理の矢印 -->
+        <mxCell id="error_edge_01" value="失敗" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="decision_01" target="task_04">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="320" y="460" />
+              <mxPoint x="320" y="490" />
+              <mxPoint x="170" y="490" />
+              <mxPoint x="170" y="460" />
+              <mxPoint x="100" y="460" />
+              <mxPoint x="100" y="350" />
+            </Array>
+            <mxPoint x="20" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="error_edge_02" value="なし" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="decision_02" target="task_08">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="520" y="600" />
+              <mxPoint x="520" y="650" />
+              <mxPoint x="300" y="650" />
+              <mxPoint x="300" y="610" />
+            </Array>
+            <mxPoint x="10" y="15" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- 凡例 -->
+        <mxCell id="legend" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8f9fa;strokeColor=#777;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="900" width="900" height="120" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend_title" value="凡例" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="70" y="910" width="40" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend_task" value="業務タスク" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="70" y="940" width="80" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend_decision" value="判断/分岐" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="180" y="940" width="30" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend_db" value="システムDB" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;fillColor=#2196F3;strokeColor=#0D47A1;strokeWidth=2;fontColor=#ffffff;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="240" y="940" width="70" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend_doc" value="文書・帳票" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#FFF9C4;strokeColor=#FBC02D;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="340" y="940" width="50" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend_start_end" value="開始/終了" style="ellipse;whiteSpace=wrap;html=1;fillColor=#2196F3;strokeColor=#0D47A1;strokeWidth=1.5;fontColor=#ffffff;fontStyle=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="420" y="945" width="50" height="25" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend_business_arrow" value="業務の流れ" style="endArrow=classic;html=1;rounded=0;strokeColor=#333;strokeWidth=1.5;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="500" y="955" as="sourcePoint" />
+            <mxPoint x="570" y="955" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="legend_system_arrow" value="システム連携" style="endArrow=classic;html=1;rounded=0;strokeColor=#1E88E5;strokeWidth=1.5;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="620" y="955" as="sourcePoint" />
+            <mxPoint x="690" y="955" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="legend_task_label" value="業務タスク" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="70" y="980" width="70" height="15" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend_decision_label" value="判断/分岐" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="170" y="980" width="60" height="15" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend_db_label" value="システムDB" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="240" y="980" width="70" height="15" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend_doc_label" value="文書・帳票" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="330" y="980" width="60" height="15" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend_start_end_label" value="開始/終了" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="420" y="980" width="60" height="15" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend_business_label" value="業務の流れ" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="500" y="980" width="70" height="15" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend_system_label" value="システム連携" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="620" y="980" width="80" height="15" as="geometry" />
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

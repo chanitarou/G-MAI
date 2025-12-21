@@ -1,0 +1,31 @@
+{
+  "name": "Dev Container",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/BiT-Flow",
+  "runServices": ["postgres"],
+  "shutdownAction": "stopCompose",
+  "envFile": [".env"],
+  // "postCreateCommand": "git config --global user.email \"$MAIL_ADDRESS\" && git config --global user.name \"$USER_NAME\"",
+  "postCreateCommand": "set -e; echo MAIL=$MAIL_ADDRESS USER=$USER_NAME; git config --global user.email \"$MAIL_ADDRESS\" && git config --global user.name \"$USER_NAME\" && git config --global alias.co checkout && git config --global alias.cleanup '!git branch --merged | grep -v '\\*' | xargs git branch -d'",
+  "remoteUser": "root",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",   // 必須ではないが便利
+        "hediet.vscode-drawio",
+        "ms-python.python", // Python言語サポート
+        "ms-python.black-formatter", // Black フォーマッター
+        // "ms-python.isort", // importの並び替え
+        // "ms-python.autopep8", // autopep8 フォーマッター
+        // "ms-python.flake8", // Flake8 (フォーマットチェック)
+        // "charliermarsh.ruff",
+        "oderwat.indent-rainbow",
+        "eamodio.gitlens",
+        // "openai.chatgpt",
+        "bierner.markdown-mermaid",
+        "mhutchie.git-graph"
+      ]
+    }
+  }
+}

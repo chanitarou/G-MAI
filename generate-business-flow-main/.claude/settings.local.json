@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(dir:*)",
+      "Bash(cp:*)",
+      "Bash(copy:*)",
+      "Bash(powershell:*)",
+      "WebFetch(domain:docs.anthropic.com)",
+      "Bash(node:*)",
+      "Bash(tasklist:*)",
+      "Bash(grep:*)",
+      "Bash(curl:*)",
+      "Bash(taskkill:*)",
+      "Bash(cmd /c:*)",
+      "Bash(pip install:*)",
+      "Bash(black:*)",
+      "Bash(python -m compileall:*)"
+    ],
+    "deny": []
+  },
+}

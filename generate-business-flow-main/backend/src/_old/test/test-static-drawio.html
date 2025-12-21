@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>静的Drawioコードテスト</title>
+    <script type="text/javascript">
+        window.mxLoadResources = false;
+        window.mxBasePath = 'https://jgraph.github.io/mxgraph/javascript/src';
+    </script>
+    <script type="text/javascript" src="https://jgraph.github.io/mxgraph/javascript/mxClient.js"></script>
+</head>
+<body style="margin: 0; padding: 20px;">
+    <h1>静的Drawioコードのテスト</h1>
+    <button onclick="displayDrawioCode()">Drawioコードを表示</button>
+    <div id="graphContainer" style="width: 100%; height: 600px; border: 1px solid #ccc; background: white; margin-top: 20px;"></div>
+    
+    <script type="text/javascript">
+        // Claude APIから生成される典型的なdrawioコード
+        const sampleDrawioCode = `<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" version="24.7.8">
+  <diagram name="業務フロー" id="flow-diagram">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="800" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="phase1" value="フェーズ1：申請準備" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="20" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="task1-1" value="1.1 申請書類準備" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=2;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="100" y="100" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="task1-2" value="1.2 必要書類確認" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=2;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="100" y="200" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="decision1" value="書類完備？" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=2;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="110" y="300" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="task1-3" value="1.3 申請書提出" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=2;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="100" y="420" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="doc1" value="申請書類" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#FFF9C4;strokeColor=#FBC02D;strokeWidth=2;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="300" y="200" width="100" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="system1" value="申請システム" style="shape=cylinder;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;fillColor=#2196F3;strokeColor=#0D47A1;fontColor=#ffffff;strokeWidth=2;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="500" y="410" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="edge1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333;strokeWidth=2;endArrow=classic;endFill=1;" edge="1" parent="1" source="task1-1" target="task1-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333;strokeWidth=2;endArrow=classic;endFill=1;" edge="1" parent="1" source="task1-2" target="decision1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge3" value="はい" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333;strokeWidth=2;endArrow=classic;endFill=1;" edge="1" parent="1" source="decision1" target="task1-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#FBC02D;strokeWidth=2;endArrow=classic;endFill=1;dashed=1;" edge="1" parent="1" source="task1-2" target="doc1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1E88E5;strokeWidth=2;endArrow=classic;endFill=1;" edge="1" parent="1" source="task1-3" target="system1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>`;
+
+        function displayDrawioCode() {
+            console.log('Drawioコード表示開始');
+            const container = document.getElementById('graphContainer');
+            container.innerHTML = '';
+            
+            if (typeof mxGraph === 'undefined') {
+                console.error('MXGraphが読み込まれていません');
+                container.innerHTML = '<p style="color: red;">MXGraphライブラリが読み込まれていません</p>';
+                return;
+            }
+            
+            try {
+                // XMLを解析
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(sampleDrawioCode, 'text/xml');
+                const parseError = doc.querySelector('parsererror');
+                
+                if (parseError) {
+                    console.error('XMLパースエラー:', parseError.textContent);
+                    container.innerHTML = '<p style="color: red;">XMLパースエラー: ' + parseError.textContent + '</p>';
+                    return;
+                }
+                
+                // グラフを作成
+                const graph = new mxGraph(container);
+                graph.setEnabled(false); // 読み取り専用
+                
+                // mxGraphModelを探す
+                const mxGraphModel = doc.querySelector('mxGraphModel');
+                if (!mxGraphModel) {
+                    console.error('mxGraphModel要素が見つかりません');
+                    container.innerHTML = '<p style="color: red;">mxGraphModel要素が見つかりません</p>';
+                    return;
+                }
+                
+                // デコード
+                const codec = new mxCodec();
+                codec.decode(mxGraphModel, graph.getModel());
+                
+                // グラフを中央に配置
+                graph.fit();
+                graph.center(true, true);
+                
+                console.log('Drawioコード表示成功');
+                
+                // セル数を確認
+                const cells = graph.getModel().cells;
+                let cellCount = 0;
+                for (let id in cells) {
+                    if (cells[id]) cellCount++;
+                }
+                console.log('総セル数:', cellCount);
+                
+            } catch (e) {
+                console.error('エラー:', e);
+                container.innerHTML = '<p style="color: red;">エラー: ' + e.message + '</p>';
+            }
+        }
+        
+        // ページ読み込み後に自動実行
+        window.onload = function() {
+            console.log('mxGraph利用可能:', typeof mxGraph !== 'undefined');
+            if (typeof mxGraph !== 'undefined') {
+                setTimeout(displayDrawioCode, 100); // 少し待ってから実行
+            }
+        };
+    </script>
+</body>
+</html>

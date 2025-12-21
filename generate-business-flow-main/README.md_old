@@ -1,0 +1,41 @@
+# BiT-Flow 関連ドキュメント
+
+---
+
+## 📦 出力ファイルについて
+
+- **BiT-Flow**：SVG形式での出力版  
+- **BIT-Flow_drawiover**：Draw.io形式での出力版  
+
+---
+
+## ⚙️ 実行ファイルについて
+
+実際に操作するのは以下の2ファイルのみです。
+
+### 1. `demo-ui-claude-proxy.html`
+- メインとなるHTML画面です。  
+- このファイルを開くだけでもUI画面自体は表示されます。  
+  ※ただし、API連携を行っていないため、この状態ではフロー図の生成はできません。
+
+---
+
+### 2. `claude-proxy-server.js`
+- ClaudeとのAPI連携処理はこのファイルに集約されています。  
+- PowerShellやターミナルから以下のコマンドを実行してサーバを起動します：
+- ClaudeとのAPI通信ができるようになります。（ClaudeのAPIキーもこの中に記述されてるはずなので、伊藤さんの方で特段設定不要かもです）  
+※挙動として、サーバを起動してから2回目以降のフロー図は前回のフロー図を踏襲するような処理にしているので、一部修正するだけとかであればよいのですが、まったく新しいフロー図を作りたいときはサーバの切断→起動をお願いします
+
+```bash
+npm start
+file://wsl.localhost/Ubuntu-22.04/home/hiroshinakahara/BiT-Flow/backend/src/static/demo-ui-claude-proxy.html
+```
+ECサイトの注文処理業務フローを描いて
+---
+
+## ⚙️ draw.ioについて
+VScode上でdrawioファイルで記述されたフロー図を操作するプラグインは「Draw.io Integration」ってやつです。
+これまじで使いやすくて感動しました笑
+ 
+なので、BiT-Flowでdraw.io形式で出力（この時点で8割完成）→残りの細かい配置等の修正を「Draw.io Integration」で実施
+が今のところ最適解な気がしてます。

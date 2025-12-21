@@ -1,0 +1,26 @@
+{
+  "name": "bit-flow-demo",
+  "version": "1.0.0",
+  "description": "BiT-Flow リアルタイムデモUI - 業務フロー図生成システム",
+  "main": "backend/src/app.py",
+  "scripts": {
+    "start": "cd backend && python -m src.app",
+    "dev": "cd backend && uvicorn src.app:app --reload --host 0.0.0.0 --port 3002",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "business-flow",
+    "svg",
+    "flowchart",
+    "claude-code",
+    "demo"
+  ],
+  "author": "BiT-Flow Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {
+    "next": "^16.0.1"
+  }
+}

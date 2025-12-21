@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>MXGraph関数チェック</title>
+    <script type="text/javascript">
+        window.mxLoadResources = false;
+        window.mxBasePath = 'https://jgraph.github.io/mxgraph/javascript/src';
+    </script>
+    <script type="text/javascript" src="https://jgraph.github.io/mxgraph/javascript/mxClient.js"></script>
+</head>
+<body style="margin: 0; padding: 20px;">
+    <h1>MXGraph関数チェック</h1>
+    <pre id="result" style="background: #f0f0f0; padding: 20px; overflow: auto;"></pre>
+    
+    <script type="text/javascript">
+        window.onload = function() {
+            const result = document.getElementById('result');
+            const checks = [];
+            
+            // 基本クラス
+            checks.push('mxGraph: ' + (typeof mxGraph !== 'undefined'));
+            checks.push('mxCodec: ' + (typeof mxCodec !== 'undefined'));
+            
+            // ユーティリティ
+            checks.push('mxUtils: ' + (typeof mxUtils !== 'undefined'));
+            if (typeof mxUtils !== 'undefined') {
+                checks.push('  - mxUtils.parseXml: ' + (typeof mxUtils.parseXml === 'function'));
+                checks.push('  - mxUtils.decompress: ' + (typeof mxUtils.decompress === 'function'));
+                checks.push('  - mxUtils.extend: ' + (typeof mxUtils.extend === 'function'));
+            }
+            
+            // 定数
+            checks.push('mxConstants: ' + (typeof mxConstants !== 'undefined'));
+            
+            // レンダラー
+            checks.push('mxCellRenderer: ' + (typeof mxCellRenderer !== 'undefined'));
+            if (typeof mxCellRenderer !== 'undefined') {
+                checks.push('  - mxCellRenderer.registerShape: ' + (typeof mxCellRenderer.registerShape === 'function'));
+            }
+            
+            // シェイプ
+            checks.push('mxShape: ' + (typeof mxShape !== 'undefined'));
+            checks.push('mxCylinder: ' + (typeof mxCylinder !== 'undefined'));
+            
+            // グラフオブジェクトのメソッド
+            if (typeof mxGraph !== 'undefined') {
+                try {
+                    const testGraph = new mxGraph(document.createElement('div'));
+                    checks.push('\nグラフメソッド:');
+                    checks.push('  - graph.decompress: ' + (typeof testGraph.decompress === 'function'));
+                    checks.push('  - graph.getModel: ' + (typeof testGraph.getModel === 'function'));
+                    checks.push('  - graph.getStylesheet: ' + (typeof testGraph.getStylesheet === 'function'));
+                    checks.push('  - graph.fit: ' + (typeof testGraph.fit === 'function'));
+                    checks.push('  - graph.center: ' + (typeof testGraph.center === 'function'));
+                } catch (e) {
+                    checks.push('グラフ作成エラー: ' + e.message);
+                }
+            }
+            
+            // 追加のmx関数
+            checks.push('\nその他のmx関数:');
+            const mxFunctions = Object.keys(window).filter(k => k.startsWith('mx')).sort();
+            mxFunctions.forEach(func => {
+                if (!['mxGraph', 'mxCodec', 'mxUtils', 'mxConstants', 'mxCellRenderer', 'mxShape', 'mxCylinder'].includes(func)) {
+                    checks.push('  - ' + func + ': ' + typeof window[func]);
+                }
+            });
+            
+            result.textContent = checks.join('\n');
+        };
+    </script>
+</body>
+</html>

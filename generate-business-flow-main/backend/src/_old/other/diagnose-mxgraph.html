@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>MXGraph診断ツール</title>
+    <script type="text/javascript">
+        window.mxLoadResources = false;
+        window.mxBasePath = 'https://jgraph.github.io/mxgraph/javascript/src';
+    </script>
+    <script type="text/javascript" src="https://jgraph.github.io/mxgraph/javascript/mxClient.js"></script>
+</head>
+<body style="margin: 0; padding: 20px;">
+    <h1>MXGraph診断ツール</h1>
+    
+    <h2>1. 基本的なグラフ表示テスト</h2>
+    <button onclick="testBasicGraph()">基本グラフを表示</button>
+    <div id="test1" style="width: 600px; height: 200px; border: 1px solid #ccc; background: white; margin: 10px 0;"></div>
+    
+    <h2>2. Drawio XML直接デコードテスト</h2>
+    <button onclick="testDirectDecode()">直接デコードテスト</button>
+    <div id="test2" style="width: 600px; height: 300px; border: 1px solid #ccc; background: white; margin: 10px 0;"></div>
+    
+    <h2>3. Claude生成フォーマットテスト</h2>
+    <button onclick="testClaudeFormat()">Claude形式テスト</button>
+    <div id="test3" style="width: 800px; height: 400px; border: 1px solid #ccc; background: white; margin: 10px 0;"></div>
+    
+    <h2>診断ログ</h2>
+    <pre id="log" style="background: #f0f0f0; padding: 10px; max-height: 300px; overflow-y: auto;"></pre>
+    
+    <script type="text/javascript">
+        function log(message) {
+            const logEl = document.getElementById('log');
+            logEl.textContent += '[' + new Date().toISOString().split('T')[1].split('.')[0] + '] ' + message + '\n';
+            console.log(message);
+        }
+        
+        window.onload = function() {
+            log('ページ読み込み完了');
+            log('mxGraph定義: ' + (typeof mxGraph !== 'undefined'));
+            log('mxUtils定義: ' + (typeof mxUtils !== 'undefined'));
+            log('mxCodec定義: ' + (typeof mxCodec !== 'undefined'));
+            log('mxConstants定義: ' + (typeof mxConstants !== 'undefined'));
+            log('mxCellRenderer定義: ' + (typeof mxCellRenderer !== 'undefined'));
+        };
+        
+        function testBasicGraph() {
+            log('\n=== 基本グラフテスト開始 ===');
+            const container = document.getElementById('test1');
+            container.innerHTML = '';
+            
+            try {
+                const graph = new mxGraph(container);
+                graph.setEnabled(false);
+                log('グラフ作成成功');
+                
+                const parent = graph.getDefaultParent();
+                graph.getModel().beginUpdate();
+                try {
+                    const v1 = graph.insertVertex(parent, null, 'Start', 20, 20, 80, 30, 
+                        'fillColor=#dae8fc;strokeColor=#6c8ebf');
+                    const v2 = graph.insertVertex(parent, null, 'Process', 150, 20, 100, 40,
+                        'fillColor=#d5e8d4;strokeColor=#82b366');
+                    const v3 = graph.insertVertex(parent, null, 'End', 300, 20, 80, 30,
+                        'fillColor=#f8cecc;strokeColor=#b85450');
+                    graph.insertEdge(parent, null, '', v1, v2);
+                    graph.insertEdge(parent, null, '', v2, v3);
+                    log('要素追加成功: 頂点3個、エッジ2個');
+                } finally {
+                    graph.getModel().endUpdate();
+                }
+                
+                // SVG要素の確認
+                const svg = container.querySelector('svg');
+                if (svg) {
+                    log('SVG要素作成成功');
+                    const paths = svg.querySelectorAll('path, rect, ellipse, text');
+                    log('SVG内要素数: ' + paths.length);
+                }
+                
+                log('基本グラフテスト完了 ✓');
+            } catch (e) {
+                log('エラー: ' + e.message);
+                console.error(e);
+            }
+        }
+        
+        function testDirectDecode() {
+            log('\n=== 直接デコードテスト開始 ===');
+            const container = document.getElementById('test2');
+            container.innerHTML = '';
+            
+            const xmlString = `<mxGraphModel>
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="2" value="タスク1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+      <mxGeometry x="50" y="50" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="3" value="タスク2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+      <mxGeometry x="250" y="50" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="2" target="3">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+  </root>
+</mxGraphModel>`;
+            
+            try {
+                const graph = new mxGraph(container);
+                graph.setEnabled(false);
+                log('グラフ作成成功');
+                
+                const doc = new DOMParser().parseFromString(xmlString, 'text/xml');
+                const codec = new mxCodec();
+                codec.decode(doc.documentElement, graph.getModel());
+                log('XMLデコード成功');
+                
+                const cells = Object.keys(graph.getModel().cells).length;
+                log('デコードされたセル数: ' + cells);
+                
+                graph.refresh();
+                log('直接デコードテスト完了 ✓');
+            } catch (e) {
+                log('エラー: ' + e.message);
+                console.error(e);
+            }
+        }
+        
+        function testClaudeFormat() {
+            log('\n=== Claude形式テスト開始 ===');
+            const container = document.getElementById('test3');
+            container.innerHTML = '';
+            
+            // Claude APIが生成する典型的なフォーマット
+            const claudeXML = `<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" version="24.7.8">
+  <diagram name="業務フロー" id="flow-123">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="start" value="開始" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="100" y="100" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="task1" value="申請書作成" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="250" y="110" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="db1" value="申請DB" style="shape=cylinder;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;fillColor=#2196F3;strokeColor=#0D47A1;fontColor=#ffffff;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="450" y="100" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="edge1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333;strokeWidth=2;" edge="1" parent="1" source="start" target="task1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1E88E5;strokeWidth=2;" edge="1" parent="1" source="task1" target="db1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>`;
+            
+            try {
+                const graph = new mxGraph(container);
+                graph.setEnabled(false);
+                log('グラフ作成成功');
+                
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(claudeXML, 'text/xml');
+                const parseError = doc.querySelector('parsererror');
+                
+                if (parseError) {
+                    log('XMLパースエラー: ' + parseError.textContent);
+                    return;
+                }
+                log('XML解析成功');
+                
+                // mxGraphModelを探す
+                const mxGraphModel = doc.querySelector('mxGraphModel');
+                const diagramNode = doc.querySelector('diagram');
+                
+                log('mxGraphModel直接存在: ' + !!mxGraphModel);
+                log('diagramノード存在: ' + !!diagramNode);
+                
+                if (diagramNode) {
+                    const innerModel = diagramNode.querySelector('mxGraphModel');
+                    log('diagram内のmxGraphModel: ' + !!innerModel);
+                    
+                    if (innerModel) {
+                        const codec = new mxCodec();
+                        codec.decode(innerModel, graph.getModel());
+                        log('diagram内のmxGraphModelをデコード');
+                    }
+                } else if (mxGraphModel) {
+                    const codec = new mxCodec();
+                    codec.decode(mxGraphModel, graph.getModel());
+                    log('直接mxGraphModelをデコード');
+                }
+                
+                // セル数確認
+                const cells = graph.getModel().cells;
+                let count = 0;
+                for (let id in cells) {
+                    if (cells[id]) {
+                        count++;
+                        if (cells[id].value) {
+                            log('  セル: ' + cells[id].value);
+                        }
+                    }
+                }
+                log('総セル数: ' + count);
+                
+                // グラフを中央に配置
+                graph.fit();
+                graph.center(true, true);
+                
+                log('Claude形式テスト完了 ✓');
+            } catch (e) {
+                log('エラー: ' + e.message);
+                log('スタック: ' + e.stack);
+                console.error(e);
+            }
+        }
+        
+        // 自動でテストを実行
+        setTimeout(() => {
+            log('\n=== 自動診断開始 ===');
+            testBasicGraph();
+            setTimeout(() => testDirectDecode(), 500);
+            setTimeout(() => testClaudeFormat(), 1000);
+        }, 500);
+    </script>
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>フロー図描画デバッグ</title>
+    <script type="text/javascript">
+        window.mxLoadResources = false;
+        window.mxBasePath = 'https://jgraph.github.io/mxgraph/javascript/src';
+    </script>
+    <script type="text/javascript" src="https://jgraph.github.io/mxgraph/javascript/mxClient.js"></script>
+    <style>
+        .debug-section {
+            margin: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background: #f9f9f9;
+        }
+        .graph-container {
+            width: 100%;
+            height: 600px;
+            border: 2px solid #2196F3;
+            background: white;
+            margin: 20px 0;
+            position: relative;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .status.success { background: #d4edda; color: #155724; }
+        .status.error { background: #f8d7da; color: #721c24; }
+        .status.warning { background: #fff3cd; color: #856404; }
+    </style>
+</head>
+<body>
+    <h1>フロー図描画デバッグツール</h1>
+    
+    <div class="debug-section">
+        <h2>1. MXGraphライブラリチェック</h2>
+        <div id="libraryCheck"></div>
+    </div>
+    
+    <div class="debug-section">
+        <h2>2. 基本描画テスト</h2>
+        <button onclick="testBasicRendering()">基本描画をテスト</button>
+        <div id="basicTest" class="graph-container"></div>
+    </div>
+    
+    <div class="debug-section">
+        <h2>3. Drawio XMLテスト</h2>
+        <button onclick="testDrawioXML()">Drawio XMLをテスト</button>
+        <div id="drawioTest" class="graph-container"></div>
+    </div>
+    
+    <div class="debug-section">
+        <h2>4. コンテナ可視性テスト</h2>
+        <button onclick="testContainerVisibility()">コンテナ可視性をテスト</button>
+        <div id="visibilityTest" class="graph-container"></div>
+    </div>
+    
+    <div class="debug-section">
+        <h2>ログ</h2>
+        <pre id="log" style="background: #000; color: #0f0; padding: 10px; max-height: 300px; overflow-y: auto;"></pre>
+    </div>
+    
+    <script type="text/javascript">
+        function log(message, type = 'info') {
+            const logEl = document.getElementById('log');
+            const time = new Date().toISOString().split('T')[1].split('.')[0];
+            const prefix = type === 'error' ? '[ERROR]' : type === 'warning' ? '[WARN]' : '[INFO]';
+            const logMessage = `${time} ${prefix} ${message}\n`;
+            logEl.textContent += logMessage;
+            console.log(message);
+        }
+        
+        function addStatus(containerId, message, type = 'info') {
+            const container = document.getElementById(containerId);
+            const status = document.createElement('div');
+            status.className = `status ${type}`;
+            status.textContent = message;
+            container.parentElement.insertBefore(status, container);
+        }
+        
+        // ライブラリチェック
+        function checkLibraries() {
+            const checkEl = document.getElementById('libraryCheck');
+            const checks = [
+                { name: 'mxGraph', obj: typeof mxGraph !== 'undefined' },
+                { name: 'mxCodec', obj: typeof mxCodec !== 'undefined' },
+                { name: 'mxUtils', obj: typeof mxUtils !== 'undefined' },
+                { name: 'mxConstants', obj: typeof mxConstants !== 'undefined' },
+                { name: 'mxCellRenderer', obj: typeof mxCellRenderer !== 'undefined' },
+                { name: 'mxShape', obj: typeof mxShape !== 'undefined' },
+                { name: 'mxRhombus', obj: typeof mxRhombus !== 'undefined' },
+                { name: 'mxEllipse', obj: typeof mxEllipse !== 'undefined' },
+                { name: 'mxCylinder', obj: typeof mxCylinder !== 'undefined' },
+                { name: 'mxSwimlane', obj: typeof mxSwimlane !== 'undefined' }
+            ];
+            
+            let html = '<table style="width: 100%;">';
+            checks.forEach(check => {
+                const status = check.obj ? '✅ 利用可能' : '❌ 利用不可';
+                const color = check.obj ? 'green' : 'red';
+                html += `<tr><td>${check.name}</td><td style="color: ${color}">${status}</td></tr>`;
+                log(`${check.name}: ${status}`, check.obj ? 'info' : 'warning');
+            });
+            html += '</table>';
+            checkEl.innerHTML = html;
+        }
+        
+        // 基本描画テスト
+        function testBasicRendering() {
+            log('\n=== 基本描画テスト開始 ===');
+            const container = document.getElementById('basicTest');
+            container.innerHTML = '';
+            
+            try {
+                log('コンテナサイズ: ' + container.offsetWidth + 'x' + container.offsetHeight);
+                
+                const graph = new mxGraph(container);
+                graph.setEnabled(false);
+                log('グラフオブジェクト作成成功');
+                
+                const parent = graph.getDefaultParent();
+                graph.getModel().beginUpdate();
+                try {
+                    const v1 = graph.insertVertex(parent, null, 'テスト1', 20, 20, 100, 40,
+                        'fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=2');
+                    const v2 = graph.insertVertex(parent, null, 'テスト2', 200, 20, 100, 40,
+                        'fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2');
+                    graph.insertEdge(parent, null, '', v1, v2);
+                    log('頂点とエッジを追加');
+                } finally {
+                    graph.getModel().endUpdate();
+                }
+                
+                // SVG要素の確認
+                setTimeout(() => {
+                    const svg = container.querySelector('svg');
+                    if (svg) {
+                        log('SVG要素が作成されました');
+                        log('SVGサイズ: ' + svg.getAttribute('width') + 'x' + svg.getAttribute('height'));
+                        const elements = svg.querySelectorAll('*');
+                        log('SVG内の要素数: ' + elements.length);
+                        addStatus('basicTest', '✅ 基本描画成功', 'success');
+                    } else {
+                        log('SVG要素が見つかりません', 'error');
+                        addStatus('basicTest', '❌ SVG要素が作成されていません', 'error');
+                    }
+                }, 100);
+                
+            } catch (e) {
+                log('エラー: ' + e.message, 'error');
+                addStatus('basicTest', '❌ エラー: ' + e.message, 'error');
+            }
+        }
+        
+        // Drawio XMLテスト
+        function testDrawioXML() {
+            log('\n=== Drawio XMLテスト開始 ===');
+            const container = document.getElementById('drawioTest');
+            container.innerHTML = '';
+            
+            const drawioXML = `<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" version="24.7.8">
+  <diagram name="テスト" id="test-123">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" value="開始" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="100" y="100" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="3" value="処理" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="250" y="110" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="2" target="3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>`;
+            
+            try {
+                const graph = new mxGraph(container);
+                graph.setEnabled(false);
+                log('グラフオブジェクト作成成功');
+                
+                // カスタムシェイプを登録
+                if (typeof mxEllipse !== 'undefined' && typeof mxCellRenderer !== 'undefined') {
+                    mxCellRenderer.registerShape('ellipse', mxEllipse);
+                    log('ellipseシェイプを登録');
+                }
+                
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(drawioXML, 'text/xml');
+                const parseError = doc.querySelector('parsererror');
+                
+                if (parseError) {
+                    log('XMLパースエラー: ' + parseError.textContent, 'error');
+                    return;
+                }
+                log('XML解析成功');
+                
+                const mxGraphModel = doc.querySelector('mxGraphModel');
+                if (mxGraphModel) {
+                    const codec = new mxCodec();
+                    codec.decode(mxGraphModel, graph.getModel());
+                    log('デコード成功');
+                    
+                    const cells = graph.getModel().cells;
+                    let cellCount = 0;
+                    for (let id in cells) {
+                        if (cells[id]) cellCount++;
+                    }
+                    log('セル数: ' + cellCount);
+                    
+                    graph.fit();
+                    graph.center(true, true);
+                    
+                    setTimeout(() => {
+                        const svg = container.querySelector('svg');
+                        if (svg) {
+                            addStatus('drawioTest', '✅ Drawio XML描画成功', 'success');
+                        } else {
+                            addStatus('drawioTest', '❌ SVG要素が作成されていません', 'error');
+                        }
+                    }, 100);
+                } else {
+                    log('mxGraphModel要素が見つかりません', 'error');
+                }
+                
+            } catch (e) {
+                log('エラー: ' + e.message, 'error');
+                addStatus('drawioTest', '❌ エラー: ' + e.message, 'error');
+            }
+        }
+        
+        // コンテナ可視性テスト
+        function testContainerVisibility() {
+            log('\n=== コンテナ可視性テスト開始 ===');
+            const container = document.getElementById('visibilityTest');
+            
+            // コンテナのスタイルを確認
+            const computed = window.getComputedStyle(container);
+            log('display: ' + computed.display);
+            log('visibility: ' + computed.visibility);
+            log('opacity: ' + computed.opacity);
+            log('position: ' + computed.position);
+            log('overflow: ' + computed.overflow);
+            log('z-index: ' + computed.zIndex);
+            
+            // 親要素の確認
+            let parent = container.parentElement;
+            let level = 0;
+            while (parent && level < 5) {
+                const parentComputed = window.getComputedStyle(parent);
+                log(`親要素[${level}] display: ${parentComputed.display}, visibility: ${parentComputed.visibility}`);
+                parent = parent.parentElement;
+                level++;
+            }
+            
+            // getBoundingClientRectで実際の位置を確認
+            const rect = container.getBoundingClientRect();
+            log(`実際の位置: top=${rect.top}, left=${rect.left}, width=${rect.width}, height=${rect.height}`);
+            
+            if (rect.width > 0 && rect.height > 0) {
+                addStatus('visibilityTest', '✅ コンテナは正常に表示されています', 'success');
+            } else {
+                addStatus('visibilityTest', '❌ コンテナのサイズが0です', 'error');
+            }
+        }
+        
+        // ページ読み込み時に自動実行
+        window.onload = function() {
+            log('=== フロー図描画デバッグツール起動 ===');
+            checkLibraries();
+            
+            // 自動テスト
+            setTimeout(() => {
+                testBasicRendering();
+                setTimeout(() => {
+                    testDrawioXML();
+                    setTimeout(() => {
+                        testContainerVisibility();
+                    }, 500);
+                }, 500);
+            }, 500);
+        };
+    </script>
+</body>
+</html>

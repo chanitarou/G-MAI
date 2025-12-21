@@ -1,0 +1,17 @@
+{
+  "name": "g-mai",
+  "version": "1.0.0",
+  "description": "G-MAI - AI業務支援ツール",
+  "scripts": {
+    "install-all": "npm install && cd case-search-rag-main && npm install && cd ../file-masking-main && npm install && cd ../generate-business-flow-main/frontend && npm install",
+    "start-all": "concurrently --names \"RAG,MASK,FLOW-FE,FLOW-BE\" --prefix-colors \"blue,green,yellow,magenta\" \"npm run start:rag\" \"npm run start:masking\" \"npm run start:flow-frontend\" \"npm run start:flow-backend\"",
+    "start:rag": "cd case-search-rag-main && npm run dev",
+    "start:masking": "cd file-masking-main && npm run dev",
+    "start:flow-frontend": "cd generate-business-flow-main/frontend && npm run dev",
+    "start:flow-backend": "cd generate-business-flow-main/backend && uvicorn src.app:app --reload --port 3002",
+    "top": "start index.html"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>MXGraph Test</title>
+    <script type="text/javascript">
+        var mxLoadResources = false;
+        var mxBasePath = 'https://jgraph.github.io/mxgraph/javascript/src';
+    </script>
+    <script type="text/javascript" src="https://jgraph.github.io/mxgraph/javascript/mxClient.js"></script>
+</head>
+<body>
+    <h1>MXGraph ライブラリテスト</h1>
+    <div id="graphContainer" style="width: 600px; height: 400px; border: 1px solid #ccc; background: white;"></div>
+    
+    <script type="text/javascript">
+        window.onload = function() {
+            console.log('Window loaded');
+            console.log('mxGraph defined:', typeof mxGraph !== 'undefined');
+            console.log('mxClient defined:', typeof mxClient !== 'undefined');
+            
+            if (typeof mxGraph !== 'undefined') {
+                try {
+                    const container = document.getElementById('graphContainer');
+                    const graph = new mxGraph(container);
+                    graph.setEnabled(false);
+                    
+                    // 簡単なテスト
+                    const parent = graph.getDefaultParent();
+                    graph.getModel().beginUpdate();
+                    try {
+                        const v1 = graph.insertVertex(parent, null, 'テスト1', 20, 20, 100, 40);
+                        const v2 = graph.insertVertex(parent, null, 'テスト2', 200, 80, 100, 40);
+                        graph.insertEdge(parent, null, '', v1, v2);
+                        console.log('グラフ作成成功');
+                    } finally {
+                        graph.getModel().endUpdate();
+                    }
+                } catch (e) {
+                    console.error('MXGraph エラー:', e);
+                }
+            } else {
+                console.error('MXGraph is not defined');
+            }
+        };
+    </script>
+</body>
+</html>

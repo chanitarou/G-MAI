@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 2400" width="1600" height="2400">
+  <!-- 全体的な背景 -->
+  <rect x="0" y="0" width="1600" height="2400" fill="#ffffff" />
+  
+  <!-- ヘッダー部分 -->
+  <rect x="0" y="0" width="1600" height="60" fill="#f0f0f0" stroke="#333" stroke-width="1" />
+  <text x="10" y="35" font-family="Arial" font-size="18" font-weight="bold">対象プロセス: 宿泊療養対応業務運営フロー</text>
+  <text x="800" y="35" font-family="Arial" font-size="14" font-weight="bold">更新日: 2025/7/21</text>
+  <text x="1100" y="35" font-family="Arial" font-size="14" font-weight="bold">作成: 厚生労働省マニュアル準拠</text>
+
+  <!-- カラムヘッダー -->
+  <rect x="0" y="60" width="100" height="60" fill="#e0e0e0" stroke="#333" stroke-width="1" />
+  <rect x="100" y="60" width="250" height="60" fill="#e0e0e0" stroke="#333" stroke-width="1" />
+  <rect x="350" y="60" width="250" height="60" fill="#e0e0e0" stroke="#333" stroke-width="1" />
+  <rect x="600" y="60" width="250" height="60" fill="#e0e0e0" stroke="#333" stroke-width="1" />
+  <rect x="850" y="60" width="250" height="60" fill="#e0e0e0" stroke="#333" stroke-width="1" />
+  <rect x="1100" y="60" width="500" height="60" fill="#e0e0e0" stroke="#333" stroke-width="1" />
+  
+  <text x="50" y="95" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">フェーズ</text>
+  <text x="225" y="95" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">保健所</text>
+  <text x="475" y="95" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">医療スタッフ</text>
+  <text x="725" y="95" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">事務・調整</text>
+  <text x="975" y="95" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">施設管理</text>
+  <text x="1350" y="95" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">システム</text>
+
+  <!-- ===== フェーズ1: 入所前業務 ===== -->
+  <rect x="0" y="120" width="100" height="500" fill="#e3f2fd" stroke="#333" stroke-width="1" />
+  <text x="50" y="370" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" transform="rotate(-90,50,370)">フェーズ1: 入所前業務</text>
+
+  <!-- 背景グリッド -->
+  <rect x="100" y="120" width="250" height="500" fill="#fcfcfc" stroke="#ddd" stroke-width="0.5" stroke-dasharray="3,3" />
+  <rect x="350" y="120" width="250" height="500" fill="#fcfcfc" stroke="#ddd" stroke-width="0.5" stroke-dasharray="3,3" />
+  <rect x="600" y="120" width="250" height="500" fill="#fcfcfc" stroke="#ddd" stroke-width="0.5" stroke-dasharray="3,3" />
+  <rect x="850" y="120" width="250" height="500" fill="#fcfcfc" stroke="#ddd" stroke-width="0.5" stroke-dasharray="3,3" />
+  <rect x="1100" y="120" width="500" height="500" fill="#fcfcfc" stroke="#ddd" stroke-width="0.5" stroke-dasharray="3,3" />
+
+  <!-- フローの開始マーカー -->
+  <circle cx="225" cy="150" r="15" fill="#2196F3" stroke="#0D47A1" stroke-width="1.5" />
+  <text x="225" y="154" font-family="Arial" font-size="14" font-weight="bold" fill="white" text-anchor="middle">開始</text>
+
+  <!-- 保健所 フェーズ1 -->
+  <rect x="150" y="180" width="150" height="40" rx="3" ry="3" fill="#f5faff" stroke="#2196F3" stroke-width="1.5" />
+  <text x="225" y="198" font-family="Arial" font-size="12" text-anchor="middle" font-weight="bold">1.1 対象者選定</text>
+  <text x="225" y="215" font-family="Arial" font-size="12" text-anchor="middle">通知受付</text>
+  
+  <!-- 医療スタッフ フェーズ1 -->
+  <rect x="375" y="240" width="150" height="40" rx="3" ry="3" fill="#f5faff" stroke="#2196F3" stroke-width="1.5" />
+  <text x="450" y="258" font-family="Arial" font-size="12" text-anchor="middle">1.2 健康状態確認</text>
+  <text x="450" y="275" font-family="Arial" font-size="12" text-anchor="middle">保健師対応</text>
+  
+  <rect x="375" y="320" width="150" height="40" rx="3" ry="3" fill="#f5faff" stroke="#2196F3" stroke-width="1.5" />
+  <text x="450" y="338" font-family="Arial" font-size="12" text-anchor="middle">1.3 入所適性判定</text>
+  <text x="450" y="355" font-family="Arial" font-size="12" text-anchor="middle">医師判断</text>
+
+  <!-- 適性判定の分岐 -->
+  <polygon points="450,380 470,400 450,420 430,400" fill="#f5faff" stroke="#2196F3" stroke-width="1.5" />
+  <text x="450" y="405" font-family="Arial" font-size="10" text-anchor="middle">適性判定</text>
+  <text x="380" y="425" font-family="Arial" font-size="9" text-anchor="middle" fill="#333">不適</text>
+  <text x="520" y="425" font-family="Arial" font-size="9" text-anchor="middle" fill="#333">適用</text>
+
+  <!-- 事務・調整 フェーズ1 -->
+  <rect x="625" y="240" width="150" height="40" rx="3" ry="3" fill="#f5faff" stroke="#2196F3" stroke-width="1.5" />
+  <text x="700" y="258" font-family="Arial" font-size="12" text-anchor="middle">1.4 宿泊施設調整</text>
+  <text x="700" y="275" font-family="Arial" font-size="12" text-anchor="middle">空室確認</text>
+
+  <rect x="625" y="470" width="150" height="40" rx="3" ry="3" fill="#f5faff" stroke="#2196F3" stroke-width="1.5" />
+  <text x="700" y="488" font-family="Arial" font-size="12" text-anchor="middle">1.5 入所日程調整</text>
+  <text x="700" y="505" font-family="Arial" font-size="12" text-anchor="middle">連絡調整</text>
+
+  <!-- 施設管理 フェーズ1 -->
+  <rect x="875" y="550" width="150" height="40" rx="3" ry="3" fill="#f5faff" stroke="#2196F3" stroke-width="1.5" />
+  <text x="950" y="568" font-family="Arial" font-size="12" text-anchor="middle">1.6 施設準備</text>
+  <text x="950" y="585" font-family="Arial" font-size="12" text-anchor="middle">清掃・感染対策</text>
+
+  <!-- システム フェーズ1 -->
+  <!-- 療養者管理DB -->
+  <g class="database">
+    <path d="M1200,180 L1200,230 A60,10 0 0,0 1320,230 L1320,180 Z" fill="#2196F3" stroke="#0D47A1" stroke-width="2" stroke-linejoin="round"/>
+    <ellipse cx="1260" cy="180" rx="60" ry="10" fill="#2196F3" stroke="#0D47A1" stroke-width="2"/>
+    <text x="1260" y="205" font-family="Arial" font-size="12" text-anchor="middle" fill="white" font-weight="bold">療養者管理DB</text>
+  </g>
+  
+  <!-- 施設管理システム -->
+  <g class="database">
+    <path d="M1200,260 L1200,310 A60,10 0 0,0 1320,310 L1320,260 Z" fill="#2196F3" stroke="#0D47A1" stroke-width="2" stroke-linejoin="round"/>
+    <ellipse cx="1260" cy="260" rx="60" ry="10" fill="#2196F3" stroke="#0D47A1" stroke-width="2"/>
+    <text x="1260" y="285" font-family="Arial" font-size="12" text-anchor="middle" fill="white" font-weight="bold">施設管理システム</text>
+  </g>
+
+  <!-- フェーズ1の矢印 -->
+  <path d="M225,165 L225,180" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)" />
+  <path d="M300,200 L375,260" stroke="#333" stroke-width="1.5" fill="none" marker-end="url(#arrow)" />
+  <path d="M450,280 L450,320" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)" />
+  <path d="M450,360 L450,380" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)" />
+  
+  <!-- 適性判定の分岐矢印 -->
+  <path d="M430,400 L350,400 L350,450 L200,450 L200,480" stroke="#333" stroke-width="1.5" fill="none" marker-end="url(#arrow)" />
+  <path d="M470,400 L625,400 L625,260 L625,240" stroke="#333" stroke-width="1.5" fill="none" marker-end="url(#arrow)" />
+  
+  <path d="M700,280 L700,470" stroke="#333" stroke-width="1.5" fill="none" marker-end="url(#arrow)" />
+  <path d="M775,490 L875,570" stroke="#333" stroke-width="1.5" fill="none" marker-end="url(#arrow)" />
+
+  <!-- システム連携矢印 -->
+  <path d="M300,200 L1200,200" stroke="#1E88E5" stroke-width="1.5" fill="none" marker-end="url(#system-arrow)" />
+  <path d="M775,260 L1200,280" stroke="#1E88E5" stroke-width="1.5" fill="none" marker-end="url(#system-arrow)" />
+
+  <!-- 文書 -->
+  <path d="M340,240 L390,240 L400,250 L400,270 L340,270 Z M390,240 L390,250 L400,250" fill="#FFF9C4" stroke="#FBC02D" stroke-width="1"/>
+  <text x="370" y="260" font-family="Arial" font-size="9" text-anchor="middle">通知書</text>
+
+  <path d="M540,470 L590,470 L600,480 L600,500 L540,500 Z M590,470 L590,480 L600,480" fill="#E1F5FE" stroke="#29B6F6" stroke-width="1"/>
+  <text x="570" y="490" font-family="Arial" font-size="9" text-anchor="middle">調整記録</text>
+
+  <!-- 不適用時の終了 -->
+  <circle cx="200" cy="480" r="12" fill="#f44336" stroke="#d32f2f" stroke-width="1.5" />
+  <text x="200" y="485" font-family="Arial" font-size="10" font-weight="bold" fill="white" text-anchor="middle">終了</text>
+
+  <!-- ===== フェーズ2: 入所時業務 ===== -->
+  <rect x="0" y="620" width="100" height="450" fill="#e3f2fd" stroke="#333" stroke-width="1" />
+  <text x="50" y="845" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" transform="rotate(-90,50,845)">フェーズ2: 入所時業務</text>
+
+  <!-- 背景グリッド -->
+  <rect x="100" y="620" width="250" height="450" fill="#fcfcfc" stroke="#ddd" stroke-width="0.5" stroke-dasharray="3,3" />
+  <rect x="350" y="620" width="250" height="450" fill="#fcfcfc" stroke="#ddd" stroke-width="0.5" stroke-dasharray="3,3" />
+  <rect x="600" y="620" width="250" height="450" fill="#fcfcfc" stroke="#ddd" stroke-width="0.5" stroke-dasharray="3,3" />
+  <rect x="850" y="620" width="250" height="450" fill="#fcfcfc" stroke="#ddd" stroke-width="0.5" stroke-dasharray="3,3" />
+  <rect x="1100" y="620" width="500" height="450" fill="#fcfcfc" stroke="#ddd" stroke-width="0.5" stroke-dasharray="3,3" />
+
+  <!-- 事務・調整 フェーズ2 -->
+  <rect x="625" y="650" width="150" height="40" rx="3" ry="3" fill="#f5faff" stroke="#2196F3" stroke-width="1.5" />
+  <text x="700" y="668" font-family="Arial" font-size="12" text-anchor="middle">2.1 到着受付</text>
+  <text x="700" y="685" font-family="Arial" font-size="12" text-anchor="middle">本人確認</text>
+
+  <!-- 医療スタッフ フェーズ2 -->
+  <rect x="375" y="720" width="150" height="40" rx="3" ry="3" fill="#f5faff" stroke="#2196F3" stroke-width="1.5" />
+  <text x="450" y="738" font-family="Arial" font-size="12" text-anchor="middle">2.2 健康状態</text>
+  <text x="450" y="755" font-family="Arial" font-size="12" text-anchor="middle">チェック</text>
+
+  <!-- 健康状態の分岐 -->
+  <polygon points="450,780 470,800 450,820 430,800" fill="#f5faff" stroke="#2196F3" stroke-width="1.5" />
+  <text x="450" y="805" font-family="Arial" font-size="10" text-anchor="middle">健康状態</text>
+  <text x="380" y="825" font-family="Arial" font-size="9" text-anchor="middle" fill="#333">異常</text>
+  <text x="520" y="825" font-family="Arial" font-size="9" text-anchor="middle" fill="#333">正常</text>
+
+  <!-- 施設管理 フェーズ2 -->
+  <rect x="875" y="820" width="150" height="40" rx="3" ry="3" fill="#f5faff" stroke="#2196F3" stroke-width="1.5" />
+  <text x="950" y="838" font-family="Arial" font-size="12" text-anchor="middle">2.3 療養ルール</text>
+  <text x="950" y="855" font-family="Arial" font-size="12" text-anchor="middle">説明</text>
+
+  <rect x="875" y="900" width="150" height="40" rx="3" ry="3" fill="#f5faff" stroke="#2196F3" stroke-width="1.5" />
+  <text x="950" y="918" font-family="Arial" font-size="12" text-anchor="middle">2.4 居室案内</text>
+  <text x="950" y="935" font-family="Arial" font-size="12" text-anchor="middle">設備説明</text>
+
+  <!-- 事務・調整 フェーズ2続き -->
+  <rect x="625" y="980" width="150" height="40" rx="3" ry="3" fill="#f5faff" stroke="#2196F3" stroke-width="1.5" />
+  <text x="700" y="998" font-family="Arial" font-size="12" text-anchor="middle">2.5 緊急連絡先</text>
+  <text x="700" y="1015" font-family="Arial" font-size="12" text-anchor="middle">確認</text>
+
+  <rect x="625" y="1030" width="150" height="40" rx="3" ry="3" fill="#f5faff" stroke="#2196F3" stroke-width="1.5" />
+  <text x="700" y="1048" font-family="Arial" font-size="12" text-anchor="middle">2.6 入所手続き</text>
+  <text x="700" y="1065" font-family="Arial" font-size="12" text-anchor="middle">完了</text>
+
+  <!-- 異常時の医療機関搬送 -->
+  <rect x="375" y="870" width="150" height="40" rx="3" ry="3" fill="#ffebee" stroke="#f44336" stroke-width="1.5" />
+  <text x="450" y="888" font-family="Arial" font-size="12" text-anchor="middle">医療機関搬送</text>
+  <text x="450" y="905" font-family="Arial" font-size="12" text-anchor="middle">緊急対応</text>
+
+  <!-- フェーズ2の矢印 -->
+  <path d="M950,590 L950,620 L700,620 L700,650" stroke="#333" stroke-width="1.5" fill="none" marker-end="url(#arrow)" />
+  <path d="M700,690 L450,690 L450,720" stroke="#333" stroke-width="1.5" fill="none" marker-end="url(#arrow)" />
+  <path d="M450,760 L450,780" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)" />
+  
+  <!-- 健康状態分岐矢印 -->
+  <path d="M430,800 L375,800 L375,870 L375,870" stroke="#333" stroke-width="1.5" fill="none" marker-end="url(#arrow)" />
+  <path d="M470,800 L875,800 L875,820" stroke="#333" stroke-width="1.5" fill="none" marker-end="url(#arrow)" />
+  
+  <path d="M950,860 L950,900" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)" />
+  <path d="M875,920 L775,920 L775,980 L775,980" stroke="#333" stroke-width="1.5" fill="none" marker-end="url(#arrow)" />
+  <path d="M700,1020 L700,1030" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)" />
+
+  <!-- システム連携矢印 -->
+  <path d="M775,670 L1200,670" stroke="#1E88E5" stroke-width="1.5" fill="none" marker-end="url(#system-arrow)" />
+
+  <!-- 文書 -->
+  <path d="M540,650 L590,650 L600,660 L600,680 L540,680 Z M590,650 L590,660 L600,660" fill="#E1F5FE" stroke="#29B6F6" stroke-width="1"/>
+  <text x="570" y="670" font-family="Arial" font-size="9" text-anchor="middle">受付記録</text>
+
+  <path d="M790,980 L840,980 L850,990 L850,1010 L790,1010 Z M840,980 L840,990 L850,990" fill="#FFF9C4" stroke="#FBC02D" stroke-width="1"/>
+  <text x="820" y="1000" font-family="Arial" font-size="9" text-anchor="middle">療養の手引き</text>
+
+  <!-- ===== フェーズ3: 滞在中業務 ===== -->
+  <rect x="0" y="1070" width="100" height="600" fill="#e3f2fd" stroke="#333" stroke-width="1" />
+  <text x="50" y="1370" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" transform="rotate(-90,50,1370)">フェーズ3: 滞在中業務</text>
+
+  <!-- 背景グリッド -->
+  <rect x="100" y="1070" width="250" height="600" fill="#fcfcfc" stroke="#ddd" stroke-width="0.5" stroke-dasharray="3,3" />
+  <rect x="350" y="1070" width="250" height="600" fill="#fcfcfc" stroke="#ddd" stroke-width="0.5" stroke-dasharray="3,3" />
+  <rect x="600" y="1070" width="250" height="600" fill="#fcfcfc" stroke="#ddd" stroke-width="0.5" stroke-dasharray="3,3" />
+  <rect x="850" y="1070" width="250" height="600" fill="#fcfcfc" stroke="#ddd" stroke-width="0.5" stroke-dasharray="3,3" />
+  <rect x="1100" y="1070" width="500" height="600" fill="#fcfcfc" stroke="#ddd" stroke-width="0.5" stroke-dasharray="3,3" />
+
+  <!-- 医療スタッフ フェーズ3 -->
+  <rect x="375" y="1100" width="150" height="40" rx="3" ry="3" fill="#f5faff" stroke="#2196F3" stroke-width="1.5" />
+  <text x="450" y="1118" font-family="Arial" font-size="12" text-anchor="middle">3.1 朝の健康観察</text>
+  <text x="450" y="1135" font-family="Arial" font-size="12" text-anchor="middle">看護師対応</text>
+
+  <rect x="375" y="1180" width="150" height="40" rx="3" ry="3" fill="#f5faff" stroke="#2196F3" stroke-width="1.5" />
+  <text x="450" y="1198" font-family="Arial" font-size="12" text-anchor="middle">3.2 夕の健康観察</text>
+  <text x="450" y="1215" font-family="Arial" font-size="12" text-anchor="middle">看護師対応</text>
+
+  <!-- 体調変化の分岐 -->
+  <polygon points="450,1250 470,1270 450,1290 430,1270" fill="#f5faff" stroke="#2196F3" stroke-width="1.5" />
+  <text x="450" y="1275" font-family="Arial" font-size="10" text-anchor="middle">体調変化</text>
+  <text x="380" y="1295" font-family="Arial" font-size="9" text-anchor="middle" fill="#333">悪化</text>
+  <text x="520" y="1295" font-family="Arial" font-size="9" text-anchor="middle" fill="#333">安定</text>
+
+  <rect x="375" y="1320" width="150" height="40" rx="3" ry="3" fill="#ffebee" stroke="#f44336" stroke-width="1.5" />
+  <text x="450" y="1338" font-family="Arial" font-size="12" text-anchor="middle">3.3 体調変化時</text>
+  <text x="450" y="1355" font-family="Arial" font-size="12" text-anchor="middle">対応</text>
+
+  <!-- 施設管理 フェーズ3 -->
+  <rect x="875" y="1280" width="150" height="40" rx="3" ry="3" fill="#f5faff" stroke="#2196F3" stroke-width="1.5" />
+  <text x="950" y="1298" font-family="Arial" font-size="12" text-anchor="middle">3.4 食事提供</text>
+  <text x="950" y="1315" font-family="Arial" font-size="12" text-anchor="middle">配膳サービス</text>
+
+  <!-- 事務・調整 フェーズ3 -->
+  <rect x="625" y="1380" width="150" height="40" rx="3" ry="3" fill="#f5faff" stroke="#2196F3" stroke-width="1.5" />
+  <text x="700" y="1398" font-family="Arial" font-size="12" text-anchor="middle">3.5 生活支援</text>
+  <text x="700" y="1415" font-family="Arial" font-size="12" text-anchor="middle">相談対応</text>
+
+  <rect x="625" y="1460" width="150" height="40" rx="3" ry="3" fill="#f5faff" stroke="#2196F3" stroke-width="1.5" />
+  <text x="700" y="1478" font-family="Arial" font-size="12" text-anchor="middle">3.6 医療機関連携</text>
+  <text x="700" y="1495" font-family="Arial" font-size="12" text-anchor="middle">情報共有</text>
+
+  <rect x="625" y="1540" width="150" height="40" rx="3" ry="3" fill="#f5faff" stroke="#2196F3" stroke-width="1.5" />
+  <text x="700" y="1558" font-family="Arial" font-size="12" text-anchor="middle">3.7 家族・関係機関</text>
+  <text x="700" y="1575" font-family="Arial" font-size="12" text-anchor="middle">連絡</text>
+
+  <!-- 継続・退所判定 -->
+  <polygon points="700,1610 720,1630 700,1650 680,1630" fill="#f5faff" stroke="#2196F3" stroke-width="1.5" />
+  <text x="700" y="1635" font-family="Arial" font-size="10" text-anchor="middle">療養継続</text>
+  <text x="630" y="1655" font-family="Arial" font-size="9" text-anchor="middle" fill="#333">継続</text>
+  <text x="770" y="1655" font-family="Arial" font-size="9" text-anchor="middle" fill="#333">退所判定</text>
+
+  <!-- システム フェーズ3 -->
+  <!-- 健康観察DB -->
+  <g class="database">
+    <path d="M1200,1180 L1200,1230 A60,10 0 0,0 1320,1230 L1320,1180 Z" fill="#2196F3" stroke="#0D47A1" stroke-width="2" stroke-linejoin="round"/>
+    <ellipse cx="1260" cy="1180" rx="60" ry="10" fill="#2196F3" stroke="#0D47A1" stroke-width="2"/>
+    <text x="1260" y="1205" font-family="Arial" font-size="12" text-anchor="middle" fill="white" font-weight="bold">健康観察DB</text>
+  </g>
+
+  <!-- 連絡記録DB -->
+  <g class="database">
+    <path d="M1200,1540 L1200,1590 A60,10 0 0,0 1320,1590 L1320,1540 Z" fill="#2196F3" stroke="#0D47A1" stroke-width="2" stroke-linejoin="round"/>
+    <ellipse cx="1260" cy="1540" rx="60" ry="10" fill="#2196F3" stroke="#0D47A1" stroke-width="2"/>
+    <text x="1260" y="1565" font-family="Arial" font-size="12" text-anchor="middle" fill="white" font-weight="bold">連絡記録DB</text>
+  </g>
+
+  <!-- フェーズ3の矢印 -->
+  <path d="M700,1070 L450,1070 L450,1100" stroke="#333" stroke-width="1.5" fill="none" marker-end="url(#arrow)" />
+  <path d="M450,1140 L450,1180" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)" />
+  <path d="M450,1220 L450,1250" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)" />
+  
+  <!-- 体調変化分岐矢印 -->
+  <path d="M430,1270 L375,1270 L375,1320 L375,1320" stroke="#333" stroke-width="1.5" fill="none" marker-end="url(#arrow)" />
+  <path d="M470,1270 L875,1270 L875,1280" stroke="#333" stroke-width="1.5" fill="none" marker-end="url(#arrow)" />
+  
+  <path d="M875,1300 L775,1300 L775,1380 L775,1380" stroke="#333" stroke-width="1.5" fill="none" marker-end="url(#arrow)" />
+  <path d="M700,1420 L700,1460" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)" />
+  <path d="M700,1500 L700,1540" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)" />
+  <path d="M700,1580 L700,1610" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)" />
+  
+  <!-- 継続ループ -->
+  <path d="M680,1630 L580,1630 L580,1120 L525,1120" stroke="#333" stroke-width="1.5" fill="none" marker-end="url(#arrow)" />
+
+  <!-- システム連携矢印 -->
+  <path d="M525,1200 L1200,1200" stroke="#1E88E5" stroke-width="1.5" fill="none" marker-end="url(#system-arrow)" />
+  <path d="M775,1560 L1200,1560" stroke="#1E88E5" stroke-width="1.5" fill="none" marker-end="url(#system-arrow)" />
+
+  <!-- 文書 -->
+  <path d="M540,1180 L590,1180 L600,1190 L600,1210 L540,1210 Z M590,1180 L590,1190 L600,1190" fill="#E1F5FE" stroke="#29B6F6" stroke-width="1"/>
+  <text x="570" y="1200" font-family="Arial" font-size="9" text-anchor="middle">健康観察記録</text>
+
+  <path d="M790,1540 L840,1540 L850,1550 L850,1570 L790,1570 Z M840,1540 L840,1550 L850,1550" fill="#E1F5FE" stroke="#29B6F6" stroke-width="1"/>
+  <text x="820" y="1560" font-family="Arial" font-size="9" text-anchor="middle">連絡記録</text>
+
+  <!-- ===== フェーズ4: 退所時業務 ===== -->
+  <rect x="0" y="1670" width="100" height="500" fill="#e3f2fd" stroke="#333" stroke-width="1" />
+  <text x="50" y="1920" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" transform="rotate(-90,50,1920)">フェーズ4: 退所時業務</text>
+
+  <!-- 背景グリッド -->
+  <rect x="100" y="1670" width="250" height="500" fill="#fcfcfc" stroke="#ddd" stroke-width="0.5" stroke-dasharray="3,3" />
+  <rect x="350" y="1670" width="250" height="500" fill="#fcfcfc" stroke="#ddd" stroke-width="0.5" stroke-dasharray="3,3" />
+  <rect x="600" y="1670" width="250" height="500" fill="#fcfcfc" stroke="#ddd" stroke-width="0.5" stroke-dasharray="3,3" />
+  <rect x="850" y="1670" width="250" height="500" fill="#fcfcfc" stroke="#ddd" stroke-width="0.5" stroke-dasharray="3,3" />
+  <rect x="1100" y="1670" width="500" height="500" fill="#fcfcfc" stroke="#ddd" stroke-width="0.5" stroke-dasharray="3,3" />
+
+  <!-- 医療スタッフ フェーズ4 -->
+  <rect x="375" y="1700" width="150" height="40" rx="3" ry="3" fill="#f5faff" stroke="#2196F3" stroke-width="1.5" />
+  <text x="450" y="1718" font-family="Arial" font-size="12" text-anchor="middle">4.1 退所条件確認</text>
+  <text x="450" y="1735" font-family="Arial" font-size="12" text-anchor="middle">医師判定</text>
+
+  <rect x="375" y="1780" width="150" height="40" rx="3" ry="3" fill="#f5faff" stroke="#2196F3" stroke-width="1.5" />
+  <text x="450" y="1798" font-family="Arial" font-size="12" text-anchor="middle">4.2 PCR検査等</text>
+  <text x="450" y="1815" font-family="Arial" font-size="12" text-anchor="middle">実施</text>
+
+  <rect x="375" y="1860" width="150" height="40" rx="3" ry="3" fill="#f5faff" stroke="#2196F3" stroke-width="1.5" />
+  <text x="450" y="1878" font-family="Arial" font-size="12" text-anchor="middle">4.3 退所判定</text>
+  <text x="450" y="1895" font-family="Arial" font-size="12" text-anchor="middle">最終確認</text>
+
+  <!-- 退所判定の分岐 -->
+  <polygon points="450,1920 470,1940 450,1960 430,1940" fill="#f5faff" stroke="#2196F3" stroke-width="1.5" />
+  <text x="450" y="1945" font-family="Arial" font-size="10" text-anchor="middle">退所判定</text>
+  <text x="380" y="1965" font-family="Arial" font-size="9" text-anchor="middle" fill="#333">継続</text>
+  <text x="520" y="1965" font-family="Arial" font-size="9" text-anchor="middle" fill="#333">退所</text>
+
+  <!-- 事務・調整 フェーズ4 -->
+  <rect x="625" y="1960" width="150" height="40" rx="3" ry="3" fill="#f5faff" stroke="#2196F3" stroke-width="1.5" />
+  <text x="700" y="1978" font-family="Arial" font-size="12" text-anchor="middle">4.4 退所手続き</text>
+  <text x="700" y="1995" font-family="Arial" font-size="12" text-anchor="middle">事務処理</text>
+
+  <!-- 施設管理 フェーズ4 -->
+  <rect x="875" y="2040" width="150" height="40" rx="3" ry="3" fill="#f5faff" stroke="#2196F3" stroke-width="1.5" />
+  <text x="950" y="2058" font-family="Arial" font-size="12" text-anchor="middle">4.5 清掃・消毒</text>
+  <text x="950" y="2075" font-family="Arial" font-size="12" text-anchor="middle">作業</text>
+
+  <rect x="875" y="2120" width="150" height="40" rx="3" ry="3" fill="#f5faff" stroke="#2196F3" stroke-width="1.5" />
+  <text x="950" y="2138" font-family="Arial" font-size="12" text-anchor="middle">4.6 次回利用準備</text>
+  <text x="950" y="2155" font-family="Arial" font-size="12" text-anchor="middle">準備完了</text>
+
+  <!-- フローの終了マーカー -->
+  <circle cx="950" cy="2190" r="15" fill="#2196F3" stroke="#0D47A1" stroke-width="1.5" />
+  <text x="950" y="2194" font-family="Arial" font-size="14" font-weight="bold" fill="white" text-anchor="middle">終了</text>
+
+  <!-- フェーズ4の矢印 -->
+  <path d="M720,1650 L450,1650 L450,1700" stroke="#333" stroke-width="1.5" fill="none" marker-end="url(#arrow)" />
+  <path d="M450,1740 L450,1780" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)" />
+  <path d="M450,1820 L450,1860" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)" />
+  <path d="M450,1900 L450,1920" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)" />
+  
+  <!-- 退所判定分岐矢印 -->
+  <path d="M430,1940 L350,1940 L350,1980 L580,1980 L580,1140" stroke="#333" stroke-width="1.5" fill="none" marker-end="url(#arrow)" />
+  <path d="M470,1940 L625,1940 L625,1960" stroke="#333" stroke-width="1.5" fill="none" marker-end="url(#arrow)" />
+  
+  <path d="M775,1980 L875,1980 L875,2040" stroke="#333" stroke-width="1.5" fill="none" marker-end="url(#arrow)" />
+  <path d="M950,2080 L950,2120" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)" />
+  <path d="M950,2160 L950,2175" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)" />
+
+  <!-- 文書 -->
+  <path d="M540,1860 L590,1860 L600,1870 L600,1890 L540,1890 Z M590,1860 L590,1870 L600,1870" fill="#E1F5FE" stroke="#29B6F6" stroke-width="1"/>
+  <text x="570" y="1880" font-family="Arial" font-size="9" text-anchor="middle">退所判定書</text>
+
+  <path d="M790,1960 L840,1960 L850,1970 L850,1990 L790,1990 Z M840,1960 L840,1970 L850,1970" fill="#FFF9C4" stroke="#FBC02D" stroke-width="1"/>
+  <text x="820" y="1980" font-family="Arial" font-size="9" text-anchor="middle">退所関連書類</text>
+
+  <!-- 矢印マーカーの定義 -->
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#333" />
+    </marker>
+    <marker id="system-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#1E88E5" />
+    </marker>
+  </defs>
+
+  <!-- 凡例 -->
+  <rect x="100" y="2220" width="1400" height="120" rx="5" ry="5" fill="#f8f9fa" stroke="#777" stroke-width="1" />
+  <text x="800" y="2245" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle">宿泊療養対応業務フロー図凡例</text>
+  
+  <!-- 凡例項目 -->
+  <rect x="150" y="2260" width="80" height="25" rx="3" ry="3" fill="#f5faff" stroke="#2196F3" stroke-width="1.5" />
+  <text x="190" y="2277" font-family="Arial" font-size="10" text-anchor="middle">業務タスク</text>
+  
+  <polygon points="280,2260 300,2273 280,2285 260,2273" fill="#f5faff" stroke="#2196F3" stroke-width="1.5" />
+  <text x="320" y="2277" font-family="Arial" font-size="10" text-anchor="middle">判断/分岐</text>
+  
+  <g class="database">
+    <path d="M400,2265 L400,2280 A25,5 0 0,0 450,2280 L450,2265 Z" fill="#2196F3" stroke="#0D47A1" stroke-width="1" stroke-linejoin="round"/>
+    <ellipse cx="425" cy="2265" rx="25" ry="5" fill="#2196F3" stroke="#0D47A1" stroke-width="1"/>
+  </g>
+  <text x="480" y="2277" font-family="Arial" font-size="10" text-anchor="middle">システムDB</text>
+  
+  <path d="M550,2273 L590,2273" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)" />
+  <text x="620" y="2277" font-family="Arial" font-size="10" text-anchor="middle">業務の流れ</text>
+  
+  <path d="M680,2273 L720,2273" stroke="#1E88E5" stroke-width="1.5" marker-end="url(#system-arrow)" />
+  <text x="750" y="2277" font-family="Arial" font-size="10" text-anchor="middle">システム連携</text>
+  
+  <path d="M800,2268 L830,2268 L835,2271 L835,2279 L800,2279 Z M830,2268 L830,2271 L835,2271" fill="#FFF9C4" stroke="#FBC02D" stroke-width="1"/>
+  <text x="860" y="2277" font-family="Arial" font-size="8" text-anchor="middle">外部文書</text>
+  
+  <path d="M920,2268 L950,2268 L955,2271 L955,2279 L920,2279 Z M950,2268 L950,2271 L955,2271" fill="#E1F5FE" stroke="#29B6F6" stroke-width="1"/>
+  <text x="980" y="2277" font-family="Arial" font-size="8" text-anchor="middle">内部文書</text>
+  
+  <circle cx="1040" cy="2273" r="8" fill="#2196F3" stroke="#0D47A1" stroke-width="1.5" />
+  <text x="1040" y="2277" font-family="Arial" font-size="8" font-weight="bold" fill="white" text-anchor="middle">始/終</text>
+  
+  <rect x="1080" y="2260" width="80" height="25" rx="3" ry="3" fill="#ffebee" stroke="#f44336" stroke-width="1.5" />
+  <text x="1120" y="2277" font-family="Arial" font-size="10" text-anchor="middle">緊急対応</text>
+
+  <text x="800" y="2305" font-family="Arial" font-size="12" text-anchor="middle" font-style="italic">注: 新型コロナウイルス感染症軽症者・無症症者の宿泊療養対応業務運営マニュアルに基づく標準的なフローです。</text>
+  <text x="800" y="2325" font-family="Arial" font-size="12" text-anchor="middle" font-style="italic">自治体や施設により詳細な手順は異なる場合があります。緊急時は24時間体制での対応が必要です。</text>
+
+</svg>

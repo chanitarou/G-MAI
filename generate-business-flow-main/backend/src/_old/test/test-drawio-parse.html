@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Drawio Parse Test</title>
+    <script type="text/javascript">
+        window.mxLoadResources = false;
+        window.mxBasePath = 'https://jgraph.github.io/mxgraph/javascript/src';
+    </script>
+    <script type="text/javascript" src="https://jgraph.github.io/mxgraph/javascript/mxClient.js"></script>
+</head>
+<body>
+    <h1>Drawio XML解析テスト</h1>
+    <button onclick="testDrawioParse()">Drawio XMLを解析</button>
+    <div id="graphContainer" style="width: 800px; height: 600px; border: 1px solid #ccc; background: white; margin-top: 20px;"></div>
+    <pre id="log" style="margin-top: 20px; padding: 10px; background: #f0f0f0; max-height: 300px; overflow-y: auto;"></pre>
+    
+    <script type="text/javascript">
+        function log(message) {
+            const logEl = document.getElementById('log');
+            logEl.textContent += message + '\n';
+            console.log(message);
+        }
+        
+        window.onload = function() {
+            log('ページ読み込み完了');
+            log('mxGraph定義: ' + (typeof mxGraph !== 'undefined'));
+            log('mxUtils定義: ' + (typeof mxUtils !== 'undefined'));
+            log('mxCodec定義: ' + (typeof mxCodec !== 'undefined'));
+            
+            // 利用可能なmx関連のグローバル変数を表示
+            const mxVars = Object.keys(window).filter(k => k.startsWith('mx'));
+            log('mx関連のグローバル変数: ' + mxVars.join(', '));
+        };
+        
+        function testDrawioParse() {
+            log('\n=== Drawio XML解析テスト ===');
+            const container = document.getElementById('graphContainer');
+            container.innerHTML = '';
+            
+            // Claude APIから生成される実際のdrawio XML形式
+            const drawioXML = `<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" version="24.7.8">
+  <diagram name="業務フロー" id="flow-123">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="800" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="phase1" value="フェーズ1：申請" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="20" width="200" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="task1" value="1.1 申請書作成" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="100" y="80" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="task2" value="1.2 申請書提出" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="100" y="160" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="edge1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333;strokeWidth=2;endArrow=classic;endFill=1;" edge="1" parent="1" source="task1" target="task2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>`;
+            
+            try {
+                const graph = new mxGraph(container);
+                graph.setEnabled(false);
+                log('グラフ作成成功');
+                
+                // XMLをパース
+                log('XML解析開始...');
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(drawioXML, 'text/xml');
+                
+                const parseError = doc.querySelector('parsererror');
+                if (parseError) {
+                    log('XMLパースエラー: ' + parseError.textContent);
+                    return;
+                }
+                log('XML解析成功');
+                
+                // mxGraphModelを探す
+                const mxGraphModel = doc.querySelector('mxGraphModel');
+                if (!mxGraphModel) {
+                    log('mxGraphModel要素が見つかりません');
+                    
+                    // diagram要素を確認
+                    const diagram = doc.querySelector('diagram');
+                    if (diagram) {
+                        log('diagram要素は存在します');
+                        log('diagram内容: ' + diagram.textContent.substring(0, 100) + '...');
+                    }
+                    return;
+                }
+                
+                log('mxGraphModel要素発見');
+                
+                // mxCodecでデコード
+                try {
+                    const codec = new mxCodec();
+                    log('mxCodec作成成功');
+                    
+                    // デコード実行
+                    codec.decode(mxGraphModel, graph.getModel());
+                    log('デコード成功');
+                    
+                    // セル数を確認
+                    const cells = graph.getModel().cells;
+                    let cellCount = 0;
+                    for (let id in cells) {
+                        if (cells[id]) {
+                            cellCount++;
+                            const cell = cells[id];
+                            if (cell.value) {
+                                log(`セル${id}: ${cell.value}`);
+                            }
+                        }
+                    }
+                    log('総セル数: ' + cellCount);
+                    
+                    // グラフを更新
+                    graph.refresh();
+                    log('グラフ更新完了');
+                    
+                    // SVG要素を確認
+                    const svg = container.querySelector('svg');
+                    if (svg) {
+                        log('SVG要素が作成されました');
+                        log('SVGサイズ: ' + svg.getAttribute('width') + 'x' + svg.getAttribute('height'));
+                    } else {
+                        log('SVG要素が見つかりません');
+                    }
+                    
+                } catch (codecError) {
+                    log('mxCodecエラー: ' + codecError.message);
+                    console.error(codecError);
+                }
+                
+            } catch (e) {
+                log('エラー: ' + e.message);
+                console.error(e);
+            }
+        }
+    </script>
+</body>
+</html>

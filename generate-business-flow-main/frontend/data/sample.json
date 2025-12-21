@@ -1,0 +1,9 @@
+{
+  "title": "BiT-Flow",
+  "description": "Claude連携による業務フロー生成デモ",
+  "links": [
+    { "label": "ホーム", "path": "/" },
+    { "label": "About", "path": "/about" },
+    { "label": "Contact", "path": "/contact" }
+  ]
+}

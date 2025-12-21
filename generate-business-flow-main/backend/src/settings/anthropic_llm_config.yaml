@@ -1,0 +1,12 @@
+claude:
+  # model: claude-sonnet-4-5-20250929
+  model: claude-opus-4-5-20251101
+  max_tokens: 64000
+
+gpt:
+  model: gpt-4.1
+  max_tokens: 32768
+
+gemini:
+  model: gemini-1.5-pro
+  max_tokens: 32768

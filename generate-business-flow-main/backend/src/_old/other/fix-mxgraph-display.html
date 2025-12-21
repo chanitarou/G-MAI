@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>MXGraph表示修正版</title>
+    <script type="text/javascript">
+        window.mxLoadResources = false;
+        window.mxBasePath = 'https://jgraph.github.io/mxgraph/javascript/src';
+    </script>
+    <script type="text/javascript" src="https://jgraph.github.io/mxgraph/javascript/mxClient.js"></script>
+    <style>
+        .graph-container {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #ccc;
+            background: white;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body style="margin: 0; padding: 20px;">
+    <h1>MXGraph表示修正版</h1>
+    
+    <button onclick="displayDrawioFromTextarea()">Drawioコードを表示</button>
+    <br><br>
+    
+    <textarea id="drawioInput" rows="10" style="width: 100%;" placeholder="ここにdrawioコードを貼り付けてください..."><?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" version="24.7.8">
+  <diagram name="業務フロー" id="flow-123">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="phase1" value="フェーズ1：申請準備" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="20" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="start" value="開始" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="100" y="100" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="task1" value="1.1 申請書作成" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="250" y="110" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333;strokeWidth=2;" edge="1" parent="1" source="start" target="task1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile></textarea>
+    
+    <div id="graphContainer" class="graph-container"></div>
+    
+    <h2>ログ</h2>
+    <pre id="log" style="background: #f0f0f0; padding: 10px; max-height: 300px; overflow-y: auto;"></pre>
+    
+    <script type="text/javascript">
+        function log(message) {
+            const logEl = document.getElementById('log');
+            const timestamp = new Date().toISOString().split('T')[1].split('.')[0];
+            logEl.textContent += `[${timestamp}] ${message}\n`;
+            console.log(message);
+        }
+        
+        window.onload = function() {
+            log('ページ読み込み完了');
+            log('mxGraph定義: ' + (typeof mxGraph !== 'undefined'));
+            
+            // 自動で表示を試行
+            setTimeout(() => {
+                log('自動表示を試行します...');
+                displayDrawioFromTextarea();
+            }, 500);
+        };
+        
+        function displayDrawioFromTextarea() {
+            log('\n=== Drawioコード表示開始 ===');
+            
+            const drawioCode = document.getElementById('drawioInput').value;
+            const container = document.getElementById('graphContainer');
+            
+            if (!drawioCode) {
+                log('Drawioコードが入力されていません');
+                return;
+            }
+            
+            log('入力されたコードの長さ: ' + drawioCode.length);
+            
+            // コンテナをクリア
+            container.innerHTML = '';
+            
+            if (typeof mxGraph === 'undefined') {
+                log('ERROR: mxGraphが定義されていません');
+                container.innerHTML = '<p style="color: red; padding: 20px;">MXGraphライブラリが読み込まれていません</p>';
+                return;
+            }
+            
+            try {
+                // XMLを解析
+                log('XMLを解析中...');
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(drawioCode, 'text/xml');
+                
+                const parseError = doc.querySelector('parsererror');
+                if (parseError) {
+                    log('XMLパースエラー: ' + parseError.textContent);
+                    return;
+                }
+                log('XML解析成功');
+                
+                // グラフを作成
+                log('グラフを作成中...');
+                const graph = new mxGraph(container);
+                graph.setEnabled(false); // 読み取り専用
+                
+                // 背景色設定
+                graph.setBackgroundImage(null);
+                const bg = graph.getView().getBackgroundPane();
+                if (bg) {
+                    bg.style.backgroundColor = '#ffffff';
+                }
+                
+                log('グラフ作成成功');
+                
+                // mxGraphModelを探す
+                log('mxGraphModelを探索中...');
+                let mxGraphModel = null;
+                
+                // 方法1: diagram内を探す
+                const diagramNode = doc.querySelector('diagram');
+                if (diagramNode) {
+                    log('diagramノードが見つかりました');
+                    mxGraphModel = diagramNode.querySelector('mxGraphModel');
+                    if (mxGraphModel) {
+                        log('diagram内にmxGraphModelが見つかりました');
+                    }
+                }
+                
+                // 方法2: 直接探す
+                if (!mxGraphModel) {
+                    mxGraphModel = doc.querySelector('mxGraphModel');
+                    if (mxGraphModel) {
+                        log('ルート直下にmxGraphModelが見つかりました');
+                    }
+                }
+                
+                if (!mxGraphModel) {
+                    log('ERROR: mxGraphModelが見つかりません');
+                    container.innerHTML = '<p style="color: red; padding: 20px;">mxGraphModelが見つかりません</p>';
+                    return;
+                }
+                
+                // デコード
+                log('mxGraphModelをデコード中...');
+                const codec = new mxCodec();
+                
+                try {
+                    codec.decode(mxGraphModel, graph.getModel());
+                    log('デコード成功');
+                    
+                    // セル数を確認
+                    const cells = graph.getModel().cells;
+                    let cellCount = 0;
+                    for (let id in cells) {
+                        if (cells[id]) {
+                            cellCount++;
+                            if (cells[id].value) {
+                                log(`  セル[${id}]: ${cells[id].value}`);
+                            }
+                        }
+                    }
+                    log(`総セル数: ${cellCount}`);
+                    
+                    // グラフを更新
+                    log('グラフを更新中...');
+                    graph.refresh();
+                    
+                    // フィットと中央配置
+                    log('グラフをフィット中...');
+                    graph.fit();
+                    graph.center(true, true);
+                    
+                    log('✓ Drawioコードの表示が完了しました');
+                    
+                    // SVG要素の確認
+                    setTimeout(() => {
+                        const svg = container.querySelector('svg');
+                        if (svg) {
+                            log('SVG要素が作成されました');
+                            const elements = svg.querySelectorAll('g, path, rect, ellipse, text');
+                            log(`SVG内の要素数: ${elements.length}`);
+                        } else {
+                            log('WARNING: SVG要素が見つかりません');
+                        }
+                    }, 100);
+                    
+                } catch (decodeError) {
+                    log('ERROR: デコードエラー: ' + decodeError.message);
+                    console.error(decodeError);
+                }
+                
+            } catch (e) {
+                log('ERROR: ' + e.message);
+                console.error(e);
+                container.innerHTML = '<p style="color: red; padding: 20px;">エラー: ' + e.message + '</p>';
+            }
+        }
+    </script>
+</body>
+</html>

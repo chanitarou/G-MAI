@@ -1,0 +1,74 @@
+# User edited
+postgres-data/
+elasticsearch-data/
+
+# General
+.DS_Store
+Thumbs.db
+*.log
+logs/
+*.tmp
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Node / JavaScript
+node_modules/
+npm-debug.log*
+yarn.lock
+.pnpm-debug.log*
+dist/
+build/
+.next/
+frontend/.next/
+frontend/out/
+.nuxt/
+coverage/
+
+# TypeScript
+*.tsbuildinfo
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.Python
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+*.egg
+*.egg-info/
+pip-wheel-metadata/
+htmlcov/
+.coverage*
+coverage.xml
+build/
+develop-eggs/
+dist/
+eggs/
+parts/
+sdist/
+var/
+*.manifest
+*.spec
+
+# Virtual environments
+.envrc
+.venv/
+venv/
+ENV/
+env/
+
+# Jupyter
+.ipynb_checkpoints
+
+# macOS/Linux dumps
+*.core

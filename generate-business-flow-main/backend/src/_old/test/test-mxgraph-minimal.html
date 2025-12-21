@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>MXGraph最小テスト</title>
+    <script type="text/javascript">
+        var mxLoadResources = false;
+        var mxBasePath = 'https://jgraph.github.io/mxgraph/javascript/src';
+    </script>
+    <script type="text/javascript" src="https://jgraph.github.io/mxgraph/javascript/mxClient.js"></script>
+</head>
+<body style="margin: 0; padding: 20px;">
+    <h1>MXGraph最小テスト</h1>
+    <div id="test1" style="width: 400px; height: 300px; border: 1px solid #ccc; background: white; margin: 20px 0;"></div>
+    
+    <script type="text/javascript">
+        // ページ読み込み完了後に実行
+        window.onload = function() {
+            console.log('ページ読み込み完了');
+            console.log('mxGraph存在:', typeof mxGraph !== 'undefined');
+            
+            if (typeof mxGraph !== 'undefined') {
+                try {
+                    // 最小のグラフを作成
+                    const container = document.getElementById('test1');
+                    const graph = new mxGraph(container);
+                    
+                    // 簡単な要素を追加
+                    const parent = graph.getDefaultParent();
+                    graph.getModel().beginUpdate();
+                    try {
+                        graph.insertVertex(parent, null, 'テスト', 20, 20, 80, 30);
+                    } finally {
+                        graph.getModel().endUpdate();
+                    }
+                    
+                    console.log('グラフ作成成功');
+                    document.body.innerHTML += '<p style="color: green;">✓ MXGraphは正常に動作しています</p>';
+                } catch (e) {
+                    console.error('エラー:', e);
+                    document.body.innerHTML += '<p style="color: red;">✗ エラー: ' + e.message + '</p>';
+                }
+            } else {
+                console.error('MXGraphが読み込まれていません');
+                document.body.innerHTML += '<p style="color: red;">✗ MXGraphライブラリが読み込まれていません</p>';
+            }
+        };
+    </script>
+</body>
+</html>

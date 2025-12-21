@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>スイムレーン修正テスト</title>
+    <script type="text/javascript">
+        window.mxLoadResources = false;
+        window.mxBasePath = 'https://jgraph.github.io/mxgraph/javascript/src';
+    </script>
+    <script type="text/javascript" src="https://jgraph.github.io/mxgraph/javascript/mxClient.js"></script>
+</head>
+<body style="margin: 0; padding: 20px;">
+    <h1>スイムレーン修正テスト</h1>
+    
+    <button onclick="testSwimlane()">スイムレーンをテスト</button>
+    <button onclick="testGroupRendering()">グループレンダリングをテスト</button>
+    
+    <div id="graphContainer" style="width: 1200px; height: 800px; border: 1px solid #ccc; background: white; margin: 20px 0;"></div>
+    
+    <pre id="log" style="background: #f0f0f0; padding: 10px; max-height: 200px; overflow-y: auto;"></pre>
+    
+    <script type="text/javascript">
+        function log(message) {
+            const logEl = document.getElementById('log');
+            logEl.textContent += message + '\n';
+            console.log(message);
+        }
+        
+        window.onload = function() {
+            log('ページ読み込み完了');
+            log('mxGraph定義: ' + (typeof mxGraph !== 'undefined'));
+            log('mxSwimlane定義: ' + (typeof mxSwimlane !== 'undefined'));
+            
+            // 利用可能なシェイプをチェック
+            if (typeof mxCellRenderer !== 'undefined' && mxCellRenderer.defaultShapes) {
+                log('登録済みシェイプ: ' + Object.keys(mxCellRenderer.defaultShapes).join(', '));
+            }
+        };
+        
+        function testSwimlane() {
+            log('\n=== スイムレーンテスト開始 ===');
+            const container = document.getElementById('graphContainer');
+            container.innerHTML = '';
+            
+            try {
+                const graph = new mxGraph(container);
+                graph.setEnabled(false);
+                
+                // カスタムシェイプを登録
+                registerSwimlaneShapes();
+                
+                const parent = graph.getDefaultParent();
+                graph.getModel().beginUpdate();
+                
+                try {
+                    // スイムレーンコンテナを作成
+                    const swimlane1 = graph.insertVertex(parent, null, '外部', 50, 50, 200, 600,
+                        'swimlane;fillColor=#f0f0f0;strokeColor=#999999;');
+                    log('スイムレーン1（外部）を追加');
+                    
+                    const swimlane2 = graph.insertVertex(parent, null, 'システム', 250, 50, 200, 600,
+                        'swimlane;fillColor=#e8f4ff;strokeColor=#2196F3;');
+                    log('スイムレーン2（システム）を追加');
+                    
+                    // スイムレーン内にタスクを配置
+                    const task1 = graph.insertVertex(swimlane1, null, 'タスク1', 20, 60, 120, 40,
+                        'rounded=1;fillColor=#f5faff;strokeColor=#2196F3;');
+                    log('タスク1をスイムレーン1内に追加');
+                    
+                    const task2 = graph.insertVertex(swimlane2, null, 'タスク2', 20, 60, 120, 40,
+                        'rounded=1;fillColor=#f5faff;strokeColor=#2196F3;');
+                    log('タスク2をスイムレーン2内に追加');
+                    
+                    // 凡例を追加
+                    const legend = graph.insertVertex(parent, null, '凡例', 500, 50, 200, 150,
+                        'group;fillColor=#ffffff;strokeColor=#333333;strokeWidth=2;');
+                    
+                    // 凡例内のアイテム
+                    graph.insertVertex(legend, null, 'タスク', 20, 30, 60, 30,
+                        'rounded=1;fillColor=#f5faff;strokeColor=#2196F3;');
+                    graph.insertVertex(legend, null, '分岐', 100, 30, 60, 30,
+                        'rhombus;fillColor=#f5faff;strokeColor=#2196F3;');
+                    graph.insertVertex(legend, null, '帳票', 20, 80, 60, 40,
+                        'shape=document;fillColor=#FFF9C4;strokeColor=#FBC02D;');
+                    
+                } finally {
+                    graph.getModel().endUpdate();
+                }
+                
+                log('スイムレーンテスト完了');
+                
+                // セルの情報を表示
+                const cells = graph.getModel().cells;
+                for (let id in cells) {
+                    const cell = cells[id];
+                    if (cell && cell.vertex && cell.parent) {
+                        log(`セル[${id}]: ${cell.value}, parent=${cell.parent.id}`);
+                    }
+                }
+                
+            } catch (e) {
+                log('ERROR: ' + e.message);
+                console.error(e);
+            }
+        }
+        
+        function testGroupRendering() {
+            log('\n=== グループレンダリングテスト ===');
+            const container = document.getElementById('graphContainer');
+            container.innerHTML = '';
+            
+            // Claudeが生成する典型的なスイムレーン構造
+            const swimlaneXML = `<?xml version="1.0" encoding="UTF-8"?>
+<mxfile>
+  <diagram>
+    <mxGraphModel>
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <!-- スイムレーン -->
+        <mxCell id="swimlane-external" value="外部" style="swimlane;fillColor=#f0f0f0;strokeColor=#999999;startSize=30;" vertex="1" parent="1">
+          <mxGeometry x="50" y="50" width="200" height="600" as="geometry" />
+        </mxCell>
+        <mxCell id="swimlane-system" value="システム" style="swimlane;fillColor=#e8f4ff;strokeColor=#2196F3;startSize=30;" vertex="1" parent="1">
+          <mxGeometry x="250" y="50" width="200" height="600" as="geometry" />
+        </mxCell>
+        <!-- タスク（スイムレーン内） -->
+        <mxCell id="task1" value="申請書作成" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;" vertex="1" parent="swimlane-external">
+          <mxGeometry x="40" y="60" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="task2" value="データ処理" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;" vertex="1" parent="swimlane-system">
+          <mxGeometry x="40" y="60" width="120" height="40" as="geometry" />
+        </mxCell>
+        <!-- 帳票 -->
+        <mxCell id="doc1" value="申請書" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#FFF9C4;strokeColor=#FBC02D;" vertex="1" parent="swimlane-external">
+          <mxGeometry x="50" y="150" width="100" height="80" as="geometry" />
+        </mxCell>
+        <!-- 凡例 -->
+        <mxCell id="legend" value="凡例" style="group;fillColor=#ffffff;strokeColor=#333333;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="500" y="50" width="250" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-task" value="タスク" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;" vertex="1" parent="legend">
+          <mxGeometry x="20" y="40" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-doc" value="帳票" style="shape=document;whiteSpace=wrap;html=1;fillColor=#FFF9C4;strokeColor=#FBC02D;" vertex="1" parent="legend">
+          <mxGeometry x="120" y="40" width="80" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>`;
+            
+            try {
+                const graph = new mxGraph(container);
+                graph.setEnabled(false);
+                
+                // カスタムシェイプを登録
+                registerSwimlaneShapes();
+                
+                // XMLを解析
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(swimlaneXML, 'text/xml');
+                const mxGraphModel = doc.querySelector('mxGraphModel');
+                
+                if (mxGraphModel) {
+                    const codec = new mxCodec();
+                    codec.decode(mxGraphModel, graph.getModel());
+                    log('XMLデコード成功');
+                    
+                    // グループとスイムレーンの情報を表示
+                    const cells = graph.getModel().cells;
+                    let swimlaneCount = 0;
+                    let groupCount = 0;
+                    
+                    for (let id in cells) {
+                        const cell = cells[id];
+                        if (cell && cell.style) {
+                            if (cell.style.includes('swimlane')) {
+                                swimlaneCount++;
+                                log(`スイムレーン検出: ${cell.value}`);
+                            }
+                            if (cell.style.includes('group')) {
+                                groupCount++;
+                                log(`グループ検出: ${cell.value}`);
+                            }
+                        }
+                    }
+                    
+                    log(`スイムレーン数: ${swimlaneCount}, グループ数: ${groupCount}`);
+                    
+                    graph.fit();
+                    graph.center(true, true);
+                }
+                
+            } catch (e) {
+                log('ERROR: ' + e.message);
+                console.error(e);
+            }
+        }
+        
+        function registerSwimlaneShapes() {
+            log('スイムレーン関連シェイプを登録中...');
+            
+            // swimlaneシェイプの登録
+            if (typeof mxSwimlane !== 'undefined' && typeof mxCellRenderer !== 'undefined') {
+                mxCellRenderer.registerShape('swimlane', mxSwimlane);
+                log('  swimlaneシェイプを登録');
+            }
+            
+            // groupシェイプの登録（四角形として）
+            if (typeof mxRectangleShape !== 'undefined' && typeof mxCellRenderer !== 'undefined') {
+                mxCellRenderer.registerShape('group', mxRectangleShape);
+                log('  groupシェイプを登録');
+            }
+            
+            // documentシェイプ
+            if (typeof mxShape !== 'undefined' && typeof mxCellRenderer !== 'undefined') {
+                function DocumentShape() {
+                    mxShape.call(this);
+                }
+                
+                if (typeof mxUtils !== 'undefined' && typeof mxUtils.extend === 'function') {
+                    mxUtils.extend(DocumentShape, mxShape);
+                    
+                    DocumentShape.prototype.paintBackground = function(c, x, y, w, h) {
+                        const fold = 20;
+                        
+                        c.begin();
+                        c.moveTo(x, y);
+                        c.lineTo(x + w - fold, y);
+                        c.lineTo(x + w, y + fold);
+                        c.lineTo(x + w, y + h);
+                        c.lineTo(x, y + h);
+                        c.close();
+                        c.fillAndStroke();
+                        
+                        c.begin();
+                        c.moveTo(x + w - fold, y);
+                        c.lineTo(x + w - fold, y + fold);
+                        c.lineTo(x + w, y + fold);
+                        c.stroke();
+                    };
+                    
+                    mxCellRenderer.registerShape('document', DocumentShape);
+                    log('  documentシェイプを登録');
+                }
+            }
+            
+            // その他のシェイプ
+            if (typeof mxRhombus !== 'undefined' && typeof mxCellRenderer !== 'undefined') {
+                mxCellRenderer.registerShape('rhombus', mxRhombus);
+                log('  rhombusシェイプを登録');
+            }
+        }
+        
+        // 自動実行
+        setTimeout(() => {
+            testGroupRendering();
+        }, 500);
+    </script>
+</body>
+</html>

@@ -1,0 +1,487 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2025-01-24T00:00:00.000Z" agent="Claude" version="24.7.8">
+  <diagram name="地震対策器具取付け支援申請事務処理フロー" id="earthquake-support-flow">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="1600" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- ヘッダー -->
+        <mxCell id="header" value="地震対策器具取付け支援申請事務処理フロー（受付～施行）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f0f0f0;strokeColor=#999999;fontSize=18;fontStyle=1;verticalAlign=middle;align=center;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="1100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="header-info" value="令和５年４月１日" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f0f0f0;strokeColor=#999999;fontSize=12;verticalAlign=middle;align=right;" vertex="1" parent="1">
+          <mxGeometry x="40" y="60" width="1100" height="25" as="geometry" />
+        </mxCell>
+        
+        <!-- スイムレーンヘッダー -->
+        <mxCell id="lane-header-citizen" value="市民（申請者）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e0e0e0;strokeColor=#999999;fontSize=14;fontStyle=1;verticalAlign=middle;align=center;" vertex="1" parent="1">
+          <mxGeometry x="40" y="95" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="lane-header-staff" value="担当者" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e0e0e0;strokeColor=#999999;fontSize=14;fontStyle=1;verticalAlign=middle;align=center;" vertex="1" parent="1">
+          <mxGeometry x="220" y="95" width="400" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="lane-header-chief" value="係長" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e0e0e0;strokeColor=#999999;fontSize=14;fontStyle=1;verticalAlign=middle;align=center;" vertex="1" parent="1">
+          <mxGeometry x="620" y="95" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="lane-header-contractor" value="受託事業者" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e0e0e0;strokeColor=#999999;fontSize=14;fontStyle=1;verticalAlign=middle;align=center;" vertex="1" parent="1">
+          <mxGeometry x="800" y="95" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="lane-header-system" value="システム" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e0e0e0;strokeColor=#999999;fontSize=14;fontStyle=1;verticalAlign=middle;align=center;" vertex="1" parent="1">
+          <mxGeometry x="940" y="95" width="200" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- スイムレーン本体 -->
+        <mxCell id="lane-body-citizen" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fcfcfc;strokeColor=#ddd;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="135" width="180" height="1380" as="geometry" />
+        </mxCell>
+        <mxCell id="lane-body-staff" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fcfcfc;strokeColor=#ddd;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="220" y="135" width="400" height="1380" as="geometry" />
+        </mxCell>
+        <mxCell id="lane-body-chief" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fcfcfc;strokeColor=#ddd;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="135" width="180" height="1380" as="geometry" />
+        </mxCell>
+        <mxCell id="lane-body-contractor" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fcfcfc;strokeColor=#ddd;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="800" y="135" width="140" height="1380" as="geometry" />
+        </mxCell>
+        <mxCell id="lane-body-system" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fcfcfc;strokeColor=#ddd;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="940" y="135" width="200" height="1380" as="geometry" />
+        </mxCell>
+        
+        <!-- 開始 -->
+        <mxCell id="start" value="開始" style="ellipse;whiteSpace=wrap;html=1;fillColor=#2196F3;strokeColor=#0D47A1;strokeWidth=1.5;fontColor=#ffffff;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="160" width="60" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- 1. 申請書提出 -->
+        <mxCell id="task1" value="1. 申請書提出&#xa;（郵送/窓口/耐震相談会）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="65" y="260" width="130" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="doc1" value="申請書" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#FFF9C4;strokeColor=#FBC02D;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="155" y="245" width="50" height="30" as="geometry" />
+        </mxCell>
+        
+        <!-- 2. 申請書受付け -->
+        <mxCell id="task2" value="2. 申請書受付け" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="370" y="260" width="100" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- 3. 支援対象該当の有無審査 -->
+        <mxCell id="task3" value="3. 支援対象要件&#xa;（❶～❽）確認" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="370" y="340" width="100" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- 4. 重複審査チェック -->
+        <mxCell id="task4" value="4. 重複審査用台帳&#xa;チェック" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="370" y="420" width="100" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- 重複審査用台帳DB -->
+        <mxCell id="db1" value="重複審査用&#xa;台帳" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;fillColor=#2196F3;strokeColor=#0D47A1;strokeWidth=2;fontColor=#ffffff;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="990" y="410" width="100" height="70" as="geometry" />
+        </mxCell>
+        
+        <!-- 分岐1: 重複確認 -->
+        <mxCell id="decision1" value="重複?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="395" y="500" width="50" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- 重複時の処理 -->
+        <mxCell id="task5a" value="5a. 結果報告書作成" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="250" y="500" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="doc2" value="結果報告書" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#FFF9C4;strokeColor=#FBC02D;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="250" y="465" width="60" height="30" as="geometry" />
+        </mxCell>
+        
+        <!-- 係長簡易決裁 -->
+        <mxCell id="task5b" value="5b. 係長簡易決裁" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="660" y="500" width="100" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- 申請者へ通知 -->
+        <mxCell id="task5c" value="5c. 申請者へ&#xa;重複通知" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="65" y="500" width="100" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- 6. 申請内容・添付証明書チェック -->
+        <mxCell id="task6" value="6. 申請内容・&#xa;添付証明書チェック" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="370" y="590" width="100" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- 分岐2: 証明書不備確認 -->
+        <mxCell id="decision2" value="不備?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="395" y="670" width="50" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- 不備時: SYSTEM2検索 -->
+        <mxCell id="task7a" value="7a. SYSTEM2にて&#xa;住所・年齢等確認" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="490" y="670" width="110" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- SYSTEM2 DB -->
+        <mxCell id="db2" value="SYSTEM2" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;fillColor=#2196F3;strokeColor=#0D47A1;strokeWidth=2;fontColor=#ffffff;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="990" y="560" width="100" height="70" as="geometry" />
+        </mxCell>
+        
+        <!-- 未添付時: 申請者に送付依頼 -->
+        <mxCell id="task7b" value="7b. 申請者に&#xa;証明書送付依頼" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="250" y="670" width="100" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- 証明書送付 -->
+        <mxCell id="task7c" value="7c. 証明書送付" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="65" y="670" width="100" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- 8. 過去申請・2世帯住宅確認 -->
+        <mxCell id="task8" value="8. 過去申請・&#xa;2世帯住宅等確認" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="370" y="760" width="100" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- DOCUMENT1 DB -->
+        <mxCell id="db3" value="DOCUMENT1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;fillColor=#2196F3;strokeColor=#0D47A1;strokeWidth=2;fontColor=#ffffff;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="990" y="750" width="100" height="70" as="geometry" />
+        </mxCell>
+        
+        <!-- 9. 収受印押印 -->
+        <mxCell id="task9" value="9. 収受印押印&#xa;（特例文書記号）&#xa;収受日・台帳連番記入" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="355" y="840" width="130" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- 10. 台帳入力 -->
+        <mxCell id="task10" value="10. 台帳入力&#xa;（申請日,文書番号,&#xa;氏名,住所等）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="355" y="930" width="130" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- 台帳DB -->
+        <mxCell id="db4" value="申請台帳" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;fillColor=#2196F3;strokeColor=#0D47A1;strokeWidth=2;fontColor=#ffffff;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="990" y="925" width="100" height="70" as="geometry" />
+        </mxCell>
+        
+        <!-- 11. 特例管理帳票作成 -->
+        <mxCell id="task11" value="11. 特例管理帳票&#xa;（決定通知書）作成" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="370" y="1020" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="doc3" value="決定通知書" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#FFF9C4;strokeColor=#FBC02D;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="440" y="1005" width="60" height="30" as="geometry" />
+        </mxCell>
+        
+        <!-- 12. 起案添付書類作成 -->
+        <mxCell id="task12" value="12. 起案添付書類作成&#xa;（送付文,指示書,&#xa;申請書類一式）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="355" y="1100" width="130" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="doc4" value="送付文" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#FFF9C4;strokeColor=#FBC02D;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="280" y="1090" width="50" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="doc5" value="指示書" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#FFF9C4;strokeColor=#FBC02D;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="280" y="1120" width="50" height="25" as="geometry" />
+        </mxCell>
+        
+        <!-- 13. 決定通知書印刷 -->
+        <mxCell id="task13" value="13. 決定通知書印刷&#xa;（市長公印押印）&#xa;コピー・ファイル保管" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="355" y="1190" width="130" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- 14. 封筒印刷 -->
+        <mxCell id="task14" value="14. 申請者宛&#xa;郵送用封筒印刷" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="370" y="1280" width="100" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- 15. 起案 -->
+        <mxCell id="task15" value="15. 起案&#xa;（特例文書記号）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="370" y="1360" width="100" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- 16. 係長決裁 -->
+        <mxCell id="task16" value="16. 係長決裁&#xa;起案決定" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="660" y="1360" width="100" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- 17. 台帳に決定通知日入力 -->
+        <mxCell id="task17" value="17. 台帳に&#xa;決定通知日入力" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="660" y="1440" width="100" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- 18. 決定通知書郵送 -->
+        <mxCell id="task18" value="18. 支援決定通知書⑧&#xa;・送付文を郵送" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="370" y="1440" width="100" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- 19. 決定通知書受領 -->
+        <mxCell id="task19" value="19. 決定通知書&#xa;受領" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="65" y="1440" width="100" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- 20. 受託事業者へ指示書送付 -->
+        <mxCell id="task20" value="20. 指示書送付&#xa;（PDF・Excel）&#xa;メール（週1回）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="355" y="1520" width="130" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- 21. 受託事業者受領 -->
+        <mxCell id="task21" value="21. 指示書受領&#xa;情報預かり証発行" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="820" y="1520" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="doc6" value="情報預かり証" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#FFF9C4;strokeColor=#FBC02D;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="820" y="1485" width="70" height="30" as="geometry" />
+        </mxCell>
+        
+        <!-- 22. 情報預かり証受領 -->
+        <mxCell id="task22" value="22. 情報預かり証&#xa;受領" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="370" y="1610" width="100" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- 終了 -->
+        <mxCell id="end" value="終了" style="ellipse;whiteSpace=wrap;html=1;fillColor=#2196F3;strokeColor=#0D47A1;strokeWidth=1.5;fontColor=#ffffff;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="390" y="1690" width="60" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- 矢印接続 -->
+        <!-- 開始 → task1 -->
+        <mxCell id="edge1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="start" target="task1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- task1 → task2 -->
+        <mxCell id="edge2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task1" target="task2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- task2 → task3 -->
+        <mxCell id="edge3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task2" target="task3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- task3 → task4 -->
+        <mxCell id="edge4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task3" target="task4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- task4 → db1 (システム連携) -->
+        <mxCell id="edge5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1E88E5;strokeWidth=1.5;endArrow=classic;endFill=1;dashed=1;" edge="1" parent="1" source="task4" target="db1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- task4 → decision1 -->
+        <mxCell id="edge6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task4" target="decision1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- decision1 → task5a (Yes) -->
+        <mxCell id="edge7" value="Yes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333333;strokeWidth=1.5;endArrow=classic;endFill=1;fontSize=9;" edge="1" parent="1" source="decision1" target="task5a">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- task5a → task5b -->
+        <mxCell id="edge8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task5a" target="task5b">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- task5b → task5c -->
+        <mxCell id="edge9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task5b" target="task5c">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="710" y="560" />
+              <mxPoint x="115" y="560" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- decision1 → task6 (No) -->
+        <mxCell id="edge10" value="No" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333333;strokeWidth=1.5;endArrow=classic;endFill=1;fontSize=9;" edge="1" parent="1" source="decision1" target="task6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- task6 → decision2 -->
+        <mxCell id="edge11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task6" target="decision2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- decision2 → task7a (証明書不備) -->
+        <mxCell id="edge12" value="不備あり" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333333;strokeWidth=1.5;endArrow=classic;endFill=1;fontSize=9;" edge="1" parent="1" source="decision2" target="task7a">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- task7a → db2 (システム連携) -->
+        <mxCell id="edge13" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1E88E5;strokeWidth=1.5;endArrow=classic;endFill=1;dashed=1;" edge="1" parent="1" source="task7a" target="db2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- decision2 → task7b (未添付) -->
+        <mxCell id="edge14" value="未添付" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333333;strokeWidth=1.5;endArrow=classic;endFill=1;fontSize=9;" edge="1" parent="1" source="decision2" target="task7b">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- task7b → task7c -->
+        <mxCell id="edge15" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task7b" target="task7c">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- task7c → task6 (ループバック) -->
+        <mxCell id="edge16" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task7c" target="task6">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="115" y="640" />
+              <mxPoint x="340" y="640" />
+              <mxPoint x="340" y="615" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- decision2 → task8 (OK) -->
+        <mxCell id="edge17" value="OK" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333333;strokeWidth=1.5;endArrow=classic;endFill=1;fontSize=9;" edge="1" parent="1" source="decision2" target="task8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- task8 → db3 (システム連携) -->
+        <mxCell id="edge18" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1E88E5;strokeWidth=1.5;endArrow=classic;endFill=1;dashed=1;" edge="1" parent="1" source="task8" target="db3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- task8 → task9 -->
+        <mxCell id="edge19" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task8" target="task9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- task9 → task10 -->
+        <mxCell id="edge20" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task9" target="task10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- task10 → db4 (システム連携) -->
+        <mxCell id="edge21" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1E88E5;strokeWidth=1.5;endArrow=classic;endFill=1;dashed=1;" edge="1" parent="1" source="task10" target="db4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- task10 → task11 -->
+        <mxCell id="edge22" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task10" target="task11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- task11 → task12 -->
+        <mxCell id="edge23" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task11" target="task12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- task12 → task13 -->
+        <mxCell id="edge24" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task12" target="task13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- task13 → task14 -->
+        <mxCell id="edge25" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task13" target="task14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- task14 → task15 -->
+        <mxCell id="edge26" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task14" target="task15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- task15 → task16 -->
+        <mxCell id="edge27" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task15" target="task16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- task16 → task17 -->
+        <mxCell id="edge28" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task16" target="task17">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- task17 → db4 (システム連携) -->
+        <mxCell id="edge29" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1E88E5;strokeWidth=1.5;endArrow=classic;endFill=1;dashed=1;" edge="1" parent="1" source="task17" target="db4">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="760" y="1465" />
+              <mxPoint x="900" y="1465" />
+              <mxPoint x="900" y="960" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- task17 → task18 -->
+        <mxCell id="edge30" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task17" target="task18">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="620" y="1465" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- task18 → task19 -->
+        <mxCell id="edge31" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task18" target="task19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- task18 → task20 -->
+        <mxCell id="edge32" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task18" target="task20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- task20 → task21 -->
+        <mxCell id="edge33" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task20" target="task21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- task21 → task22 -->
+        <mxCell id="edge34" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task21" target="task22">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="870" y="1590" />
+              <mxPoint x="870" y="1590" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- task22 → end -->
+        <mxCell id="edge35" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#333333;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" parent="1" source="task22" target="end">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- 凡例 -->
+        <mxCell id="legend-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8f9fa;strokeColor=#777777;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1780" width="700" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-title" value="凡例" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1785" width="50" height="20" as="geometry" />
+        </mxCell>
+        
+        <!-- 凡例アイテム -->
+        <mxCell id="legend-task" value="業務タスク" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1810" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-decision" value="判断/分岐" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=1.5;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="140" y="1805" width="50" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-db" value="システムDB" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;fillColor=#2196F3;strokeColor=#0D47A1;strokeWidth=2;fontColor=#ffffff;fontSize=9;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="210" y="1805" width="70" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-doc" value="文書・帳票" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#FFF9C4;strokeColor=#FBC02D;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="300" y="1810" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-start" value="開始/終了" style="ellipse;whiteSpace=wrap;html=1;fillColor=#2196F3;strokeColor=#0D47A1;strokeWidth=1.5;fontColor=#ffffff;fontSize=9;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="380" y="1805" width="50" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-arrow1" value="" style="endArrow=classic;html=1;strokeColor=#333333;strokeWidth=1.5;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="450" y="1825" as="sourcePoint" />
+            <mxPoint x="510" y="1825" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend-arrow1-label" value="業務の流れ" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="520" y="1815" width="70" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-arrow2" value="" style="endArrow=classic;html=1;strokeColor=#1E88E5;strokeWidth=1.5;dashed=1;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="600" y="1825" as="sourcePoint" />
+            <mxPoint x="660" y="1825" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend-arrow2-label" value="システム連携" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="670" y="1815" width="70" height="20" as="geometry" />
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

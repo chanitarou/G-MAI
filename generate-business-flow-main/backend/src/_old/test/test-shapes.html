@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>MXGraphシェイプテスト</title>
+    <script type="text/javascript">
+        window.mxLoadResources = false;
+        window.mxBasePath = 'https://jgraph.github.io/mxgraph/javascript/src';
+    </script>
+    <script type="text/javascript" src="https://jgraph.github.io/mxgraph/javascript/mxClient.js"></script>
+</head>
+<body style="margin: 0; padding: 20px;">
+    <h1>MXGraphシェイプテスト</h1>
+    
+    <button onclick="testAllShapes()">全シェイプをテスト</button>
+    <button onclick="checkAvailableShapes()">利用可能なシェイプを確認</button>
+    
+    <div id="graphContainer" style="width: 1000px; height: 600px; border: 1px solid #ccc; background: white; margin: 20px 0;"></div>
+    
+    <pre id="log" style="background: #f0f0f0; padding: 10px; max-height: 200px; overflow-y: auto;"></pre>
+    
+    <script type="text/javascript">
+        function log(message) {
+            const logEl = document.getElementById('log');
+            logEl.textContent += message + '\n';
+            console.log(message);
+        }
+        
+        function checkAvailableShapes() {
+            log('\n=== 利用可能なシェイプクラス ===');
+            const shapes = [
+                'mxRectangleShape',
+                'mxEllipse',
+                'mxRhombus',
+                'mxCylinder',
+                'mxTriangle',
+                'mxHexagon',
+                'mxCloud',
+                'mxActor',
+                'mxLabel',
+                'mxImageShape'
+            ];
+            
+            shapes.forEach(shape => {
+                log(`${shape}: ${typeof window[shape] !== 'undefined' ? '✓ 利用可能' : '✗ 利用不可'}`);
+            });
+        }
+        
+        function testAllShapes() {
+            log('\n=== シェイプテスト開始 ===');
+            const container = document.getElementById('graphContainer');
+            container.innerHTML = '';
+            
+            if (typeof mxGraph === 'undefined') {
+                log('ERROR: mxGraphが定義されていません');
+                return;
+            }
+            
+            try {
+                const graph = new mxGraph(container);
+                graph.setEnabled(false);
+                
+                // カスタムシェイプを登録
+                registerCustomShapes();
+                
+                const parent = graph.getDefaultParent();
+                graph.getModel().beginUpdate();
+                
+                try {
+                    // 1. 楕円（開始・終了）
+                    const ellipse1 = graph.insertVertex(parent, null, '開始', 50, 50, 80, 80,
+                        'shape=ellipse;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=2;');
+                    log('楕円（開始）を追加');
+                    
+                    // 2. ひし形（分岐）
+                    const rhombus1 = graph.insertVertex(parent, null, '分岐', 200, 50, 100, 80,
+                        'shape=rhombus;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=2;');
+                    log('ひし形（分岐）を追加');
+                    
+                    // 3. 四角形（タスク）
+                    const rect1 = graph.insertVertex(parent, null, 'タスク', 350, 50, 120, 60,
+                        'rounded=1;fillColor=#f5faff;strokeColor=#2196F3;strokeWidth=2;');
+                    log('四角形（タスク）を追加');
+                    
+                    // 4. シリンダー（DB）
+                    const cylinder1 = graph.insertVertex(parent, null, 'DB', 550, 50, 80, 80,
+                        'shape=cylinder;fillColor=#2196F3;strokeColor=#0D47A1;fontColor=#ffffff;strokeWidth=2;');
+                    log('シリンダー（DB）を追加');
+                    
+                    // 5. ドキュメント（帳票）
+                    const doc1 = graph.insertVertex(parent, null, '帳票1', 700, 50, 100, 80,
+                        'shape=document;fillColor=#FFF9C4;strokeColor=#FBC02D;strokeWidth=2;');
+                    log('ドキュメント（帳票）を追加');
+                    
+                    // 別の位置にもドキュメントを配置
+                    const doc2 = graph.insertVertex(parent, null, '帳票2', 200, 200, 100, 80,
+                        'shape=document;fillColor=#FFF9C4;strokeColor=#FBC02D;strokeWidth=2;');
+                    log('ドキュメント2を追加（位置テスト）');
+                    
+                    // エッジを追加
+                    graph.insertEdge(parent, null, '', ellipse1, rhombus1);
+                    graph.insertEdge(parent, null, 'はい', rhombus1, rect1);
+                    graph.insertEdge(parent, null, '', rect1, cylinder1);
+                    graph.insertEdge(parent, null, '', rect1, doc1);
+                    
+                } finally {
+                    graph.getModel().endUpdate();
+                }
+                
+                log('✓ シェイプテスト完了');
+                
+                // セルの情報を表示
+                const cells = graph.getModel().cells;
+                let shapeCount = {};
+                for (let id in cells) {
+                    const cell = cells[id];
+                    if (cell && cell.style) {
+                        const match = cell.style.match(/shape=(\w+)/);
+                        if (match) {
+                            shapeCount[match[1]] = (shapeCount[match[1]] || 0) + 1;
+                        }
+                    }
+                }
+                log('\nシェイプ統計:');
+                for (let shape in shapeCount) {
+                    log(`  ${shape}: ${shapeCount[shape]}個`);
+                }
+                
+            } catch (e) {
+                log('ERROR: ' + e.message);
+                console.error(e);
+            }
+        }
+        
+        function registerCustomShapes() {
+            log('カスタムシェイプを登録中...');
+            
+            // rhombusシェイプ
+            if (typeof mxRhombus !== 'undefined' && typeof mxCellRenderer !== 'undefined') {
+                mxCellRenderer.registerShape('rhombus', mxRhombus);
+                log('  rhombusシェイプを登録');
+            }
+            
+            // ellipseシェイプ
+            if (typeof mxEllipse !== 'undefined' && typeof mxCellRenderer !== 'undefined') {
+                mxCellRenderer.registerShape('ellipse', mxEllipse);
+                log('  ellipseシェイプを登録');
+            }
+            
+            // cylinderシェイプ
+            if (typeof mxCylinder !== 'undefined' && typeof mxCellRenderer !== 'undefined') {
+                mxCellRenderer.registerShape('cylinder', mxCylinder);
+                log('  cylinderシェイプを登録');
+            }
+            
+            // documentシェイプ（カスタム実装）
+            if (typeof mxShape !== 'undefined' && typeof mxCellRenderer !== 'undefined') {
+                function DocumentShape() {
+                    mxShape.call(this);
+                }
+                
+                if (typeof mxUtils !== 'undefined' && typeof mxUtils.extend === 'function') {
+                    mxUtils.extend(DocumentShape, mxShape);
+                    
+                    DocumentShape.prototype.paintBackground = function(c, x, y, w, h) {
+                        const fold = 20;
+                        
+                        c.begin();
+                        c.moveTo(x, y);
+                        c.lineTo(x + w - fold, y);
+                        c.lineTo(x + w, y + fold);
+                        c.lineTo(x + w, y + h);
+                        c.lineTo(x, y + h);
+                        c.close();
+                        c.fillAndStroke();
+                        
+                        // 折り返し部分
+                        c.begin();
+                        c.moveTo(x + w - fold, y);
+                        c.lineTo(x + w - fold, y + fold);
+                        c.lineTo(x + w, y + fold);
+                        c.stroke();
+                    };
+                    
+                    mxCellRenderer.registerShape('document', DocumentShape);
+                    log('  documentシェイプを登録（カスタム）');
+                }
+            }
+        }
+        
+        // ページ読み込み時に自動実行
+        window.onload = function() {
+            checkAvailableShapes();
+            setTimeout(testAllShapes, 500);
+        };
+    </script>
+</body>
+</html>

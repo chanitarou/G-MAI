@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>G-MAI - Gold Wid Valley Method AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-black: #18181b;
+            --color-gray-700: #3f3f46;
+            --color-gray-500: #71717a;
+            --color-gray-400: #a1a1aa;
+            --color-gray-300: #d4d4d8;
+            --color-gray-200: #e4e4e7;
+            --color-gray-100: #f4f4f5;
+            --color-gray-50: #fafafa;
+            --color-white: #ffffff;
+        }
+
+        html {
+            height: 100%;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            background-color: var(--color-gray-100);
+            color: var(--color-black);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 32px;
+        }
+
+        .page-wrapper {
+            background: var(--color-white);
+            border: 1px solid var(--color-gray-200);
+            width: 100%;
+            max-width: 960px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            padding: 32px 40px;
+            border-bottom: 1px solid var(--color-gray-200);
+            display: flex;
+            align-items: baseline;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            color: var(--color-black);
+        }
+
+        .logo-full {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--color-gray-700);
+            letter-spacing: 0.02em;
+        }
+
+        /* Main */
+        .main {
+            display: flex;
+        }
+
+        /* Section */
+        .section {
+            flex: 1;
+            padding: 32px 40px;
+        }
+
+        .section:first-child {
+            border-right: 1px solid var(--color-gray-200);
+        }
+
+        .section-label {
+            display: inline-block;
+            font-size: 0.625rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-white);
+            background: var(--color-gray-700);
+            padding: 4px 8px;
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--color-black);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--color-black);
+        }
+
+        /* Service List */
+        .service-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .service-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            background: var(--color-gray-50);
+            border: 1px solid var(--color-gray-200);
+            text-decoration: none;
+            transition: all 0.15s ease;
+        }
+
+        .service-item:hover {
+            background: var(--color-black);
+            border-color: var(--color-black);
+        }
+
+        .service-item:hover .service-name {
+            color: var(--color-white);
+        }
+
+        .service-item:hover .service-arrow {
+            color: var(--color-white);
+            transform: translateX(4px);
+        }
+
+        .service-name {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--color-black);
+            transition: color 0.15s ease;
+        }
+
+        .service-arrow {
+            font-size: 0.875rem;
+            color: var(--color-gray-400);
+            transition: all 0.15s ease;
+        }
+
+        /* Coming Soon */
+        .service-item.coming-soon {
+            background: var(--color-white);
+            border: 1px dashed var(--color-gray-300);
+            cursor: default;
+        }
+
+        .service-item.coming-soon:hover {
+            background: var(--color-white);
+            border-color: var(--color-gray-300);
+        }
+
+        .service-item.coming-soon .service-name {
+            font-weight: 500;
+            color: var(--color-gray-400);
+            font-size: 0.8125rem;
+        }
+
+        .service-item.coming-soon:hover .service-name {
+            color: var(--color-gray-400);
+        }
+
+        /* Responsive */
+        @media (max-width: 700px) {
+            body {
+                padding: 16px;
+                align-items: flex-start;
+            }
+
+            .page-wrapper {
+                max-width: 100%;
+            }
+
+            .header {
+                padding: 24px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .main {
+                flex-direction: column;
+            }
+
+            .section {
+                padding: 24px;
+            }
+
+            .section:first-child {
+                border-right: none;
+                border-bottom: 1px solid var(--color-gray-200);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <header class="header">
+            <h1 class="logo">G-MAI</h1>
+            <span class="logo-full">Gold Wid Valley Method AI</span>
+        </header>
+
+        <main class="main">
+            <section class="section">
+                <span class="section-label">Cross Public Service</span>
+                <h2 class="section-title">クロスパブリックサービス</h2>
+                <div class="service-list">
+                    <a href="http://localhost:5173" class="service-item" target="_blank">
+                        <span class="service-name">事例検索RAG</span>
+                        <span class="service-arrow">→</span>
+                    </a>
+                    <a href="http://localhost:5174" class="service-item" target="_blank">
+                        <span class="service-name">成果物マスキングチェッカー</span>
+                        <span class="service-arrow">→</span>
+                    </a>
+                    <div class="service-item coming-soon">
+                        <span class="service-name">Coming Soon</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <span class="section-label">Cross Border Service</span>
+                <h2 class="section-title">クロスボーダーサービス</h2>
+                <div class="service-list">
+                    <a href="http://localhost:3000" class="service-item" target="_blank">
+                        <span class="service-name">業務フロー図AI作成</span>
+                        <span class="service-arrow">→</span>
+                    </a>
+                    <div class="service-item coming-soon">
+                        <span class="service-name">Coming Soon</span>
+                    </div>
+                    <div class="service-item coming-soon">
+                        <span class="service-name">Coming Soon</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
