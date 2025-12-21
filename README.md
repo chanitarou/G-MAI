@@ -1,11 +1,10 @@
 ● G-MAI 開発環境セットアップ手順
 
-  1. リポジトリをクローン
-
+1.リポジトリをクローン
   git clone https://github.com/chanitarou/G-MAI.git
   cd G-MAI
-
-  2. 依存関係インストール
+  
+2. 依存関係インストール
 
   # ルート
   npm install
@@ -15,7 +14,7 @@
   cd file-masking-main && npm install && cd ..
   cd generate-business-flow-main/frontend && npm install && cd ../..
 
-  3. 環境変数の設定
+3. 環境変数の設定
 
   業務フロー図AI（必須）
   # generate-business-flow-main/backend/src/.env を作成
@@ -33,11 +32,11 @@
   # file-masking-main/.env を作成
   VITE_GEMINI_API_KEY=xxxxx
 
-  4. 起動
+4. 起動
 
   npm run start-all
 
-  5. アクセス
+5. アクセス
 
   - トップページ: index.html を直接開く
   - 事例検索RAG: http://localhost:5173
