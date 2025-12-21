@@ -59,6 +59,8 @@
   4. 起動
 
   npm run start-all
+  もしくは
+  start-allのバッチファイルをダブルクリック
 
   5. アクセス
 
