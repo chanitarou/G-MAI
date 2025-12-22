@@ -463,6 +463,77 @@ export async function updateDocumentMetadata(documentId: string, tags: string[])
 }
 
 /**
+ * Deletes a document from Dify dataset
+ * @param documentId - The ID of the document to delete
+ * @returns Promise that resolves when document is deleted
+ * @throws DifyApiError if the API call fails
+ */
+export async function deleteDocumentFromDataset(documentId: string): Promise<void> {
+  if (!DIFY_API_KEY) {
+    throw new Error('Dify API key is not configured. Please set VITE_DIFY_API_KEY in your .env file.');
+  }
+
+  if (!DIFY_DATASET_ID) {
+    throw new Error('Dify dataset ID is not configured. Please set VITE_DIFY_DATASET_ID in your .env file.');
+  }
+
+  const url = `${DIFY_API_BASE_URL}/datasets/${DIFY_DATASET_ID}/documents/${documentId}`;
+
+  console.log('=== Deleting document from Dify ===');
+  console.log('URL:', url);
+  console.log('Document ID:', documentId);
+
+  try {
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${DIFY_API_KEY}`,
+      },
+    });
+
+    console.log('Response status:', response.status);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Error response:', errorText);
+      let errorMessage = `Failed to delete document from Dify: ${response.statusText}`;
+
+      try {
+        const errorJson = JSON.parse(errorText);
+        errorMessage = errorJson.message || errorMessage;
+      } catch {
+        errorMessage = errorText || errorMessage;
+      }
+
+      throw {
+        message: errorMessage,
+        status: response.status,
+      } as DifyApiError;
+    }
+
+    console.log('Document deleted successfully');
+    return;
+  } catch (error) {
+    console.error('Error deleting document:', error);
+
+    if ((error as DifyApiError).message) {
+      throw error;
+    }
+
+    // Network errors
+    if (error instanceof TypeError) {
+      throw {
+        message: `ネットワークエラー: ${error.message}. API への接続を確認してください。`,
+      } as DifyApiError;
+    }
+
+    throw {
+      message: error instanceof Error ? error.message : 'An unknown error occurred',
+    } as DifyApiError;
+  }
+}
+
+/**
  * Upload document response interface
  */
 export interface DifyUploadDocumentResponse {

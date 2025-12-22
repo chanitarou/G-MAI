@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { UploadedFile, Tag } from '../types';
 import TagBadge from '../components/TagBadge';
 import Modal from '../components/Modal';
-import { createDifyTag, fetchDifyTags, fetchDifyDocuments, updateDocumentMetadata, uploadDocumentToDataset } from '../services/difyApi';
+import { createDifyTag, fetchDifyTags, fetchDifyDocuments, updateDocumentMetadata, uploadDocumentToDataset, deleteDocumentFromDataset } from '../services/difyApi';
 
 export default function FileManagement() {
   const [files, setFiles] = useState<UploadedFile[]>([]);
@@ -18,7 +18,17 @@ export default function FileManagement() {
   const [isSavingTags, setIsSavingTags] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState<{ current: number; total: number } | null>(null);
+  const [deletingFileId, setDeletingFileId] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteConfirmFile, setDeleteConfirmFile] = useState<UploadedFile | null>(null);
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // トースト表示（自動で消える）
+  const showToast = useCallback((message: string, type: 'success' | 'error' = 'success') => {
+    setToast({ message, type });
+    setTimeout(() => setToast(null), 3000);
+  }, []);
 
   const loadFilesFromDify = useCallback(async () => {
     setIsLoadingFiles(true);
@@ -165,9 +175,9 @@ export default function FileManagement() {
 
     // Show result message
     if (failedUploads.length > 0) {
-      alert(`アップロード完了\n成功: ${successfulUploads.length}件\n失敗: ${failedUploads.length}件\n\n失敗したファイル:\n${failedUploads.join('\n')}`);
+      showToast(`アップロード完了（成功: ${successfulUploads.length}件 / 失敗: ${failedUploads.length}件）`, 'error');
     } else if (successfulUploads.length > 0) {
-      alert(`${successfulUploads.length}件のファイルをアップロードしました`);
+      showToast(`${successfulUploads.length}件のファイルをアップロードしました`, 'success');
     }
 
     setIsUploading(false);
@@ -179,8 +189,39 @@ export default function FileManagement() {
     }
   };
 
-  const handleDeleteFile = (fileId: string) => {
-    setFiles(prev => prev.filter(f => f.id !== fileId));
+  const handleDeleteClick = (fileId: string) => {
+    const file = files.find(f => f.id === fileId);
+    if (file) {
+      setDeleteConfirmFile(file);
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteConfirmFile(null);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!deleteConfirmFile) return;
+
+    const fileId = deleteConfirmFile.id;
+    const fileName = deleteConfirmFile.name;
+
+    setDeletingFileId(fileId);
+    setIsDeleting(true);
+
+    try {
+      await deleteDocumentFromDataset(fileId);
+      setFiles(prev => prev.filter(f => f.id !== fileId));
+      setDeleteConfirmFile(null);
+      showToast('ファイルを削除しました', 'success');
+      console.log('File deleted successfully:', fileName);
+    } catch (error: any) {
+      console.error('Failed to delete file:', error);
+      showToast(`削除に失敗しました: ${error.message || '不明なエラー'}`, 'error');
+    } finally {
+      setDeletingFileId(null);
+      setIsDeleting(false);
+    }
   };
 
   const handleAddTag = async () => {
@@ -468,10 +509,11 @@ export default function FileManagement() {
 
                 <button
                   type="button"
-                  onClick={() => handleDeleteFile(file.id)}
-                  className="ml-4 text-sm text-red-600 hover:text-red-800 font-medium"
+                  onClick={() => handleDeleteClick(file.id)}
+                  disabled={isDeleting && deletingFileId === file.id}
+                  className="ml-4 text-sm text-red-600 hover:text-red-800 font-medium disabled:text-red-300 disabled:cursor-not-allowed"
                 >
-                  削除
+                  {isDeleting && deletingFileId === file.id ? '削除中...' : '削除'}
                 </button>
               </div>
             </div>
@@ -550,6 +592,70 @@ export default function FileManagement() {
           </div>
         </div>
       </Modal>
+
+      {/* Delete Confirmation Modal */}
+      <Modal
+        isOpen={deleteConfirmFile !== null}
+        onClose={handleDeleteCancel}
+      >
+        <div className="space-y-4">
+          <p className="text-sm text-gray-700">
+            「<span className="font-medium">{deleteConfirmFile?.name}</span>」を削除しますか？
+          </p>
+          <div className="flex justify-end gap-3 pt-2">
+            <button
+              type="button"
+              onClick={handleDeleteCancel}
+              disabled={isDeleting}
+              className="px-4 py-2 text-gray-700 text-sm rounded hover:bg-gray-100 disabled:opacity-50"
+            >
+              キャンセル
+            </button>
+            <button
+              type="button"
+              onClick={handleDeleteConfirm}
+              disabled={isDeleting}
+              className="px-4 py-2 bg-red-600 text-white text-sm rounded hover:bg-red-700 disabled:bg-red-300"
+            >
+              {isDeleting ? '削除中...' : '削除'}
+            </button>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Toast Notification */}
+      {toast && (
+        <div className="fixed bottom-6 right-6 z-50 animate-fade-in">
+          <div
+            className={`flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg ${
+              toast.type === 'success'
+                ? 'bg-green-50 border border-green-200 text-green-800'
+                : 'bg-red-50 border border-red-200 text-red-800'
+            }`}
+          >
+            {toast.type === 'success' ? (
+              <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            ) : (
+              <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            )}
+            <span className="text-sm font-medium">{toast.message}</span>
+            <button
+              onClick={() => setToast(null)}
+              className={`ml-2 p-1 rounded hover:bg-opacity-20 ${
+                toast.type === 'success' ? 'hover:bg-green-600' : 'hover:bg-red-600'
+              }`}
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

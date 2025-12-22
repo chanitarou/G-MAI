@@ -1,7 +1,7 @@
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  title: string;
+  title?: string;
   children: React.ReactNode;
 }
 
@@ -20,11 +20,11 @@ export default function Modal({ isOpen, onClose, title, children }: ModalProps) 
         {/* Modal */}
         <div className="relative bg-white rounded shadow-sm w-full max-w-md">
           {/* Header */}
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
+          <div className={`flex items-center justify-between px-6 py-4 ${title ? 'border-b border-gray-200' : ''}`}>
+            {title && <h2 className="text-lg font-semibold text-gray-900">{title}</h2>}
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 focus:outline-none"
+              className={`text-gray-400 hover:text-gray-600 focus:outline-none ${!title ? 'ml-auto' : ''}`}
             >
               <svg
                 className="w-6 h-6"
@@ -43,7 +43,7 @@ export default function Modal({ isOpen, onClose, title, children }: ModalProps) 
           </div>
 
           {/* Content */}
-          <div className="px-6 py-4">{children}</div>
+          <div className={`px-6 ${title ? 'py-4' : 'pb-6'}`}>{children}</div>
         </div>
       </div>
     </div>
