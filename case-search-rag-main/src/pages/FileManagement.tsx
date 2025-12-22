@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { UploadedFile, Tag } from '../types';
 import TagBadge from '../components/TagBadge';
 import Modal from '../components/Modal';
-import { createDifyTag, fetchDifyTags, fetchDifyDocuments, updateDocumentMetadata } from '../services/difyApi';
+import { createDifyTag, fetchDifyTags, fetchDifyDocuments, updateDocumentMetadata, uploadDocumentToDataset } from '../services/difyApi';
 
 export default function FileManagement() {
   const [files, setFiles] = useState<UploadedFile[]>([]);
@@ -16,6 +16,8 @@ export default function FileManagement() {
   const [isLoadingTags, setIsLoadingTags] = useState(false);
   const [isLoadingFiles, setIsLoadingFiles] = useState(false);
   const [isSavingTags, setIsSavingTags] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState<{ current: number; total: number } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const loadFilesFromDify = useCallback(async () => {
@@ -121,16 +123,60 @@ export default function FileManagement() {
     }
   };
 
-  const handleFiles = (fileList: FileList) => {
-    const newFiles: UploadedFile[] = Array.from(fileList).map(file => ({
-      id: Date.now().toString() + Math.random(),
-      name: file.name,
-      uploadDate: new Date(),
-      tags: [],
-      size: file.size,
-    }));
+  const handleFiles = async (fileList: FileList) => {
+    const filesToUpload = Array.from(fileList);
 
-    setFiles(prev => [...newFiles, ...prev]);
+    if (filesToUpload.length === 0) return;
+
+    setIsUploading(true);
+    setUploadProgress({ current: 0, total: filesToUpload.length });
+
+    const successfulUploads: UploadedFile[] = [];
+    const failedUploads: string[] = [];
+
+    for (let i = 0; i < filesToUpload.length; i++) {
+      const file = filesToUpload[i];
+      setUploadProgress({ current: i + 1, total: filesToUpload.length });
+
+      try {
+        console.log(`Uploading file ${i + 1}/${filesToUpload.length}: ${file.name}`);
+        const response = await uploadDocumentToDataset(file);
+
+        // Add the successfully uploaded file to the list
+        successfulUploads.push({
+          id: response.document.id,
+          name: response.document.name,
+          uploadDate: new Date(response.document.created_at * 1000),
+          tags: [],
+          size: file.size,
+        });
+
+        console.log(`Successfully uploaded: ${file.name}`);
+      } catch (error: any) {
+        console.error(`Failed to upload ${file.name}:`, error);
+        failedUploads.push(`${file.name}: ${error.message || '不明なエラー'}`);
+      }
+    }
+
+    // Update local state with successfully uploaded files
+    if (successfulUploads.length > 0) {
+      setFiles(prev => [...successfulUploads, ...prev]);
+    }
+
+    // Show result message
+    if (failedUploads.length > 0) {
+      alert(`アップロード完了\n成功: ${successfulUploads.length}件\n失敗: ${failedUploads.length}件\n\n失敗したファイル:\n${failedUploads.join('\n')}`);
+    } else if (successfulUploads.length > 0) {
+      alert(`${successfulUploads.length}件のファイルをアップロードしました`);
+    }
+
+    setIsUploading(false);
+    setUploadProgress(null);
+
+    // Reload the file list from Dify to ensure consistency
+    if (successfulUploads.length > 0) {
+      await loadFilesFromDify();
+    }
   };
 
   const handleDeleteFile = (fileId: string) => {
@@ -261,9 +307,11 @@ export default function FileManagement() {
       {/* Upload Area */}
       <div
         className={`mb-8 border-2 border-dashed rounded p-8 text-center transition-colors ${
-          dragActive
-            ? 'border-gray-400 bg-gray-50'
-            : 'border-gray-300 bg-white'
+          isUploading
+            ? 'border-blue-400 bg-blue-50'
+            : dragActive
+              ? 'border-gray-400 bg-gray-50'
+              : 'border-gray-300 bg-white'
         }`}
         onDragEnter={handleDrag}
         onDragLeave={handleDrag}
@@ -271,28 +319,45 @@ export default function FileManagement() {
         onDrop={handleDrop}
       >
         <div className="flex flex-col items-center">
-          <p className="text-sm text-gray-700 font-medium mb-2">
-            ファイルをドラッグ&ドロップ
-          </p>
-          <p className="text-xs text-gray-500 mb-4">または</p>
-          <input
-            ref={fileInputRef}
-            type="file"
-            multiple
-            onChange={handleFileSelect}
-            className="hidden"
-            accept=".pdf,.docx,.txt"
-          />
-          <button
-            type="button"
-            onClick={() => fileInputRef.current?.click()}
-            className="px-4 py-2 bg-gray-900 text-white text-sm rounded hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-          >
-            ファイルを選択
-          </button>
-          <p className="text-xs text-gray-500 mt-4">
-            対応形式: PDF, DOCX, TXT (最大10MB)
-          </p>
+          {isUploading ? (
+            <>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mb-3"></div>
+              <p className="text-sm text-gray-700 font-medium mb-2">
+                アップロード中...
+              </p>
+              {uploadProgress && (
+                <p className="text-xs text-gray-500">
+                  {uploadProgress.current} / {uploadProgress.total} ファイル
+                </p>
+              )}
+            </>
+          ) : (
+            <>
+              <p className="text-sm text-gray-700 font-medium mb-2">
+                ファイルをドラッグ&ドロップ
+              </p>
+              <p className="text-xs text-gray-500 mb-4">または</p>
+              <input
+                ref={fileInputRef}
+                type="file"
+                multiple
+                onChange={handleFileSelect}
+                className="hidden"
+                accept=".pdf,.docx,.txt"
+              />
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isUploading}
+                className="px-4 py-2 bg-gray-900 text-white text-sm rounded hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed"
+              >
+                ファイルを選択
+              </button>
+              <p className="text-xs text-gray-500 mt-4">
+                対応形式: PDF, DOCX, TXT (最大10MB)
+              </p>
+            </>
+          )}
         </div>
       </div>
 

@@ -463,6 +463,151 @@ export async function updateDocumentMetadata(documentId: string, tags: string[])
 }
 
 /**
+ * Upload document response interface
+ */
+export interface DifyUploadDocumentResponse {
+  document: {
+    id: string;
+    position: number;
+    data_source_type: string;
+    data_source_info: {
+      upload_file_id: string;
+    };
+    dataset_process_rule_id: string;
+    name: string;
+    created_from: string;
+    created_by: string;
+    created_at: number;
+    tokens: number;
+    indexing_status: string;
+    error: string | null;
+    enabled: boolean;
+    disabled_at: number | null;
+    disabled_by: string | null;
+    archived: boolean;
+    display_status: string;
+    word_count: number;
+    hit_count: number;
+    doc_form: string;
+  };
+  batch: string;
+}
+
+/**
+ * Uploads a file to Dify dataset
+ * @param file - The file to upload
+ * @returns Promise that resolves with the upload response
+ * @throws DifyApiError if the API call fails
+ */
+export async function uploadDocumentToDataset(file: File): Promise<DifyUploadDocumentResponse> {
+  if (!DIFY_API_KEY) {
+    throw new Error('Dify API key is not configured. Please set VITE_DIFY_API_KEY in your .env file.');
+  }
+
+  if (!DIFY_DATASET_ID) {
+    throw new Error('Dify dataset ID is not configured. Please set VITE_DIFY_DATASET_ID in your .env file.');
+  }
+
+  const url = `${DIFY_API_BASE_URL}/datasets/${DIFY_DATASET_ID}/document/create-by-file`;
+
+  // Build form data according to Dify API specification
+  const formData = new FormData();
+
+  // Add the data parameter with indexing configuration
+  // doc_form must match the dataset's doc_form setting (hierarchical_model for parent-child chunking)
+  const dataPayload = {
+    indexing_technique: 'high_quality',
+    doc_form: 'hierarchical_model',
+    doc_language: 'Japanese',
+    process_rule: {
+      mode: 'custom',
+      rules: {
+        pre_processing_rules: [
+          { id: 'remove_extra_spaces', enabled: true },
+          { id: 'remove_urls_emails', enabled: false }
+        ],
+        segmentation: {
+          separator: '\n\n',
+          max_tokens: 500,
+          chunk_overlap: 50
+        },
+        parent_mode: 'paragraph',
+        subchunk_segmentation: {
+          separator: '\n',
+          max_tokens: 200,
+          chunk_overlap: 50
+        }
+      }
+    }
+  };
+  formData.append('data', JSON.stringify(dataPayload));
+
+  // Add the file
+  formData.append('file', file);
+
+  console.log('=== Uploading document to Dify ===');
+  console.log('URL:', url);
+  console.log('File name:', file.name);
+  console.log('File size:', file.size);
+  console.log('File type:', file.type);
+  console.log('Data payload:', JSON.stringify(dataPayload, null, 2));
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${DIFY_API_KEY}`,
+        // Note: Do NOT set Content-Type header for multipart/form-data
+        // The browser will automatically set it with the correct boundary
+      },
+      body: formData,
+    });
+
+    console.log('Response status:', response.status);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Error response:', errorText);
+      let errorMessage = `Failed to upload document to Dify: ${response.statusText}`;
+
+      try {
+        const errorJson = JSON.parse(errorText);
+        errorMessage = errorJson.message || errorMessage;
+      } catch {
+        errorMessage = errorText || errorMessage;
+      }
+
+      throw {
+        message: errorMessage,
+        status: response.status,
+      } as DifyApiError;
+    }
+
+    const data: DifyUploadDocumentResponse = await response.json();
+    console.log('Upload successful:', data);
+
+    return data;
+  } catch (error) {
+    console.error('Error uploading document:', error);
+
+    if ((error as DifyApiError).message) {
+      throw error;
+    }
+
+    // Network errors
+    if (error instanceof TypeError) {
+      throw {
+        message: `ネットワークエラー: ${error.message}. API への接続を確認してください。`,
+      } as DifyApiError;
+    }
+
+    throw {
+      message: error instanceof Error ? error.message : 'An unknown error occurred',
+    } as DifyApiError;
+  }
+}
+
+/**
  * Sends a chat message to Dify chatbot and retrieves the response
  * @param query - The user's query/message
  * @param conversationId - Optional conversation ID to continue an existing conversation
