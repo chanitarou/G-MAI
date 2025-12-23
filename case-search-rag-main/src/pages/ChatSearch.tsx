@@ -1,8 +1,41 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { chatHistory as initialChatHistory } from '../data/dummyData';
-import { ChatMessage, SearchResult, Tag } from '../types';
+import { ChatMessage, SearchResult, METADATA_OPTIONS } from '../types';
 import TagBadge from '../components/TagBadge';
-import { fetchDifyTags, sendChatMessage } from '../services/difyApi';
+import { sendChatMessage } from '../services/difyApi';
+
+// メタデータオプションからタグリストを生成
+interface TagOption {
+  id: string;
+  name: string;
+  category: string;
+}
+
+function getTagOptions(): TagOption[] {
+  const options: TagOption[] = [];
+
+  // セクター
+  METADATA_OPTIONS.sector.forEach(value => {
+    options.push({ id: `sector-${value}`, name: value, category: 'sector' });
+  });
+
+  // 業務種別
+  METADATA_OPTIONS.business_type.forEach(value => {
+    options.push({ id: `business_type-${value}`, name: value, category: 'business_type' });
+  });
+
+  // クライアント種別（公共）
+  METADATA_OPTIONS.client_category['公共'].forEach(value => {
+    options.push({ id: `client_category-公共-${value}`, name: value, category: 'client_category' });
+  });
+
+  // クライアント種別（民間）
+  METADATA_OPTIONS.client_category['民間'].forEach(value => {
+    options.push({ id: `client_category-民間-${value}`, name: value, category: 'client_category' });
+  });
+
+  return options;
+}
 
 export default function ChatSearch() {
   const [messages, setMessages] = useState<ChatMessage[]>(initialChatHistory);
@@ -11,8 +44,7 @@ export default function ChatSearch() {
   const [isSearching, setIsSearching] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [tags, setTags] = useState<Tag[]>([]);
-  const [isLoadingTags, setIsLoadingTags] = useState(false);
+  const [tagOptions] = useState<TagOption[]>(getTagOptions());
   const [conversationId, setConversationId] = useState<string | undefined>(undefined);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -23,36 +55,6 @@ export default function ChatSearch() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
-
-  const loadTagsFromDify = useCallback(async () => {
-    setIsLoadingTags(true);
-    try {
-      console.log('Loading tags from Dify...');
-      const difyTags = await fetchDifyTags();
-      console.log('Fetched tags from Dify:', difyTags);
-
-      // Convert Dify metadata fields to Tag format
-      const convertedTags: Tag[] = difyTags.map(field => ({
-        id: field.id,
-        name: field.name,
-        color: 'gray',
-      }));
-
-      console.log('Converted tags:', convertedTags);
-      setTags(convertedTags);
-    } catch (error: any) {
-      console.error('Failed to load tags from Dify:', error);
-      // Silently fail - don't show error to user for tag loading
-    } finally {
-      setIsLoadingTags(false);
-    }
-  }, []);
-
-  // Load tags from Dify API on component mount
-  useEffect(() => {
-    loadTagsFromDify();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const handleSend = async () => {
     // Allow search with tags only or text only or both
@@ -283,33 +285,71 @@ export default function ChatSearch() {
                 </button>
               )}
             </div>
-            {isLoadingTags ? (
-              <div className="flex justify-center items-center py-4 text-xs text-gray-500">
-                <div className="animate-pulse">タグを読み込んでいます...</div>
+            <div className="space-y-2">
+              {/* セクター */}
+              <div>
+                <span className="text-xs text-gray-500 mr-2">セクター:</span>
+                <div className="inline-flex flex-wrap gap-1">
+                  {tagOptions.filter(t => t.category === 'sector').map((tag) => (
+                    <button
+                      key={tag.id}
+                      type="button"
+                      onClick={() => toggleTag(tag.name)}
+                      disabled={isSearching}
+                      className={`px-2 py-0.5 text-xs rounded border transition-colors ${
+                        selectedTags.includes(tag.name)
+                          ? 'bg-gray-900 text-white border-gray-900'
+                          : 'bg-white text-gray-700 border-gray-300 hover:border-gray-500'
+                      } disabled:opacity-50 disabled:cursor-not-allowed`}
+                    >
+                      {tag.name}
+                    </button>
+                  ))}
+                </div>
               </div>
-            ) : tags.length === 0 ? (
-              <div className="text-xs text-gray-500 py-2">
-                タグがありません。ファイル管理ページからタグを追加してください。
+              {/* 業務種別 */}
+              <div>
+                <span className="text-xs text-gray-500 mr-2">業務種別:</span>
+                <div className="inline-flex flex-wrap gap-1">
+                  {tagOptions.filter(t => t.category === 'business_type').map((tag) => (
+                    <button
+                      key={tag.id}
+                      type="button"
+                      onClick={() => toggleTag(tag.name)}
+                      disabled={isSearching}
+                      className={`px-2 py-0.5 text-xs rounded border transition-colors ${
+                        selectedTags.includes(tag.name)
+                          ? 'bg-gray-900 text-white border-gray-900'
+                          : 'bg-white text-gray-700 border-gray-300 hover:border-gray-500'
+                      } disabled:opacity-50 disabled:cursor-not-allowed`}
+                    >
+                      {tag.name}
+                    </button>
+                  ))}
+                </div>
               </div>
-            ) : (
-              <div className="flex flex-wrap gap-2">
-                {tags.map((tag) => (
-                  <button
-                    key={tag.id}
-                    type="button"
-                    onClick={() => toggleTag(tag.name)}
-                    disabled={isSearching}
-                    className={`px-3 py-1 text-sm rounded-full border transition-colors ${
-                      selectedTags.includes(tag.name)
-                        ? 'bg-gray-900 text-white border-gray-900'
-                        : 'bg-white text-gray-700 border-gray-300 hover:border-gray-500'
-                    } disabled:opacity-50 disabled:cursor-not-allowed`}
-                  >
-                    #{tag.name}
-                  </button>
-                ))}
+              {/* クライアント種別 */}
+              <div>
+                <span className="text-xs text-gray-500 mr-2">クライアント:</span>
+                <div className="inline-flex flex-wrap gap-1">
+                  {tagOptions.filter(t => t.category === 'client_category').map((tag) => (
+                    <button
+                      key={tag.id}
+                      type="button"
+                      onClick={() => toggleTag(tag.name)}
+                      disabled={isSearching}
+                      className={`px-2 py-0.5 text-xs rounded border transition-colors ${
+                        selectedTags.includes(tag.name)
+                          ? 'bg-gray-900 text-white border-gray-900'
+                          : 'bg-white text-gray-700 border-gray-300 hover:border-gray-500'
+                      } disabled:opacity-50 disabled:cursor-not-allowed`}
+                    >
+                      {tag.name}
+                    </button>
+                  ))}
+                </div>
               </div>
-            )}
+            </div>
           </div>
 
           {/* Search Input */}

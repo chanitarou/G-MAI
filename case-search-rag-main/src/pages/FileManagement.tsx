@@ -1,21 +1,15 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { UploadedFile, Tag } from '../types';
-import TagBadge from '../components/TagBadge';
+import { UploadedFile, DocumentMetadata, METADATA_OPTIONS } from '../types';
 import Modal from '../components/Modal';
-import { createDifyTag, fetchDifyTags, fetchDifyDocuments, updateDocumentMetadata, uploadDocumentToDataset, deleteDocumentFromDataset } from '../services/difyApi';
+import { fetchDifyDocuments, updateDocumentMetadata, uploadDocumentToDataset, deleteDocumentFromDataset } from '../services/difyApi';
 
 export default function FileManagement() {
   const [files, setFiles] = useState<UploadedFile[]>([]);
-  const [tags, setTags] = useState<Tag[]>([]);
   const [dragActive, setDragActive] = useState(false);
-  const [newTagName, setNewTagName] = useState('');
   const [editingFileId, setEditingFileId] = useState<string | null>(null);
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [isTagManagementOpen, setIsTagManagementOpen] = useState(false);
-  const [isCreatingTag, setIsCreatingTag] = useState(false);
-  const [isLoadingTags, setIsLoadingTags] = useState(false);
+  const [editingMetadata, setEditingMetadata] = useState<DocumentMetadata>({});
   const [isLoadingFiles, setIsLoadingFiles] = useState(false);
-  const [isSavingTags, setIsSavingTags] = useState(false);
+  const [isSavingMetadata, setIsSavingMetadata] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState<{ current: number; total: number } | null>(null);
   const [deletingFileId, setDeletingFileId] = useState<string | null>(null);
@@ -39,13 +33,14 @@ export default function FileManagement() {
 
       // Convert Dify documents to UploadedFile format
       const convertedFiles: UploadedFile[] = response.data.map(doc => {
-        // Extract tag names from doc_metadata
-        const tagNames: string[] = [];
+        // Extract metadata from doc_metadata
+        const metadata: DocumentMetadata = {};
         if (doc.doc_metadata) {
           doc.doc_metadata.forEach(meta => {
-            // Skip built-in fields
             if (meta.id !== 'built-in' && meta.value) {
-              tagNames.push(meta.name);
+              if (meta.name === 'sector') metadata.sector = meta.value;
+              if (meta.name === 'business_type') metadata.business_type = meta.value;
+              if (meta.name === 'client_category') metadata.client_category = meta.value;
             }
           });
         }
@@ -53,8 +48,8 @@ export default function FileManagement() {
         return {
           id: doc.id,
           name: doc.name,
-          uploadDate: new Date(doc.created_at * 1000), // Convert Unix timestamp to Date
-          tags: tagNames,
+          uploadDate: new Date(doc.created_at * 1000),
+          metadata,
           size: doc.data_source_info.size,
         };
       });
@@ -63,49 +58,16 @@ export default function FileManagement() {
       setFiles(convertedFiles);
     } catch (error: any) {
       console.error('Failed to load documents from Dify:', error);
-      alert(`ファイルの読み込みに失敗しました: ${error.message || '不明なエラー'}`);
+      showToast(`ファイルの読み込みに失敗しました: ${error.message || '不明なエラー'}`, 'error');
     } finally {
       setIsLoadingFiles(false);
     }
-  }, []);
-
-  const loadTagsFromDify = useCallback(async () => {
-    setIsLoadingTags(true);
-    try {
-      console.log('Loading tags from Dify...');
-      const difyTags = await fetchDifyTags();
-      console.log('Fetched tags from Dify:', difyTags);
-
-      // Convert Dify metadata fields to Tag format
-      const convertedTags: Tag[] = difyTags.map(field => ({
-        id: field.id,
-        name: field.name,
-        color: 'gray',
-      }));
-
-      console.log('Converted tags:', convertedTags);
-      setTags(convertedTags);
-    } catch (error: any) {
-      console.error('Failed to load tags from Dify:', error);
-      alert(`タグの読み込みに失敗しました: ${error.message || '不明なエラー'}`);
-    } finally {
-      setIsLoadingTags(false);
-    }
-  }, []);
+  }, [showToast]);
 
   // Load documents from Dify API on component mount
   useEffect(() => {
     loadFilesFromDify();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // Load tags from Dify API when tag management modal opens
-  useEffect(() => {
-    if (isTagManagementOpen) {
-      loadTagsFromDify();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isTagManagementOpen]);
+  }, [loadFilesFromDify]);
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -152,12 +114,11 @@ export default function FileManagement() {
         console.log(`Uploading file ${i + 1}/${filesToUpload.length}: ${file.name}`);
         const response = await uploadDocumentToDataset(file);
 
-        // Add the successfully uploaded file to the list
         successfulUploads.push({
           id: response.document.id,
           name: response.document.name,
           uploadDate: new Date(response.document.created_at * 1000),
-          tags: [],
+          metadata: {},
           size: file.size,
         });
 
@@ -168,12 +129,10 @@ export default function FileManagement() {
       }
     }
 
-    // Update local state with successfully uploaded files
     if (successfulUploads.length > 0) {
       setFiles(prev => [...successfulUploads, ...prev]);
     }
 
-    // Show result message
     if (failedUploads.length > 0) {
       showToast(`アップロード完了（成功: ${successfulUploads.length}件 / 失敗: ${failedUploads.length}件）`, 'error');
     } else if (successfulUploads.length > 0) {
@@ -183,7 +142,6 @@ export default function FileManagement() {
     setIsUploading(false);
     setUploadProgress(null);
 
-    // Reload the file list from Dify to ensure consistency
     if (successfulUploads.length > 0) {
       await loadFilesFromDify();
     }
@@ -224,99 +182,50 @@ export default function FileManagement() {
     }
   };
 
-  const handleAddTag = async () => {
-    if (!newTagName.trim()) return;
-
-    const tagExists = tags.some(t => t.name === newTagName.trim());
-    if (tagExists) {
-      alert('そのタグは既に存在します');
-      return;
-    }
-
-    setIsCreatingTag(true);
-
-    try {
-      // Call Dify API to create tag
-      await createDifyTag(newTagName.trim());
-
-      // Success notification
-      alert('タグが正常に作成されました');
-
-      // Clear input
-      setNewTagName('');
-
-      // Reload tags from Dify to get the latest list with the new tag
-      await loadTagsFromDify();
-    } catch (error: any) {
-      // Handle API errors
-      console.error('Failed to create tag in Dify:', error);
-      const errorMessage = error.message || 'タグの作成に失敗しました';
-      alert(`エラー: ${errorMessage}`);
-    } finally {
-      setIsCreatingTag(false);
-    }
-  };
-
-  const handleDeleteTag = (tagId: string) => {
-    const tagToDelete = tags.find(t => t.id === tagId);
-    if (!tagToDelete) return;
-
-    // ファイルからもタグを削除
-    setFiles(prev => prev.map(file => ({
-      ...file,
-      tags: file.tags.filter(t => t !== tagToDelete.name),
-    })));
-
-    setTags(prev => prev.filter(t => t.id !== tagId));
-  };
-
-  const handleEditFileTags = async (fileId: string) => {
+  const handleEditMetadata = (fileId: string) => {
     const file = files.find(f => f.id === fileId);
     if (!file) return;
 
     setEditingFileId(fileId);
-    setSelectedTags(file.tags);
-
-    // Load tags from Dify if not already loaded
-    if (tags.length === 0) {
-      await loadTagsFromDify();
-    }
+    setEditingMetadata({ ...file.metadata });
   };
 
-  const handleToggleTag = (tagName: string) => {
-    setSelectedTags(prev =>
-      prev.includes(tagName)
-        ? prev.filter(t => t !== tagName)
-        : [...prev, tagName]
-    );
-  };
-
-  const handleSaveFileTags = async () => {
+  const handleSaveMetadata = async () => {
     if (!editingFileId) return;
 
-    setIsSavingTags(true);
+    setIsSavingMetadata(true);
 
     try {
-      // Update Dify document metadata
-      await updateDocumentMetadata(editingFileId, selectedTags);
+      await updateDocumentMetadata(editingFileId, editingMetadata);
 
-      // Update local state
       setFiles(prev => prev.map(file =>
         file.id === editingFileId
-          ? { ...file, tags: selectedTags }
+          ? { ...file, metadata: { ...editingMetadata } }
           : file
       ));
 
       setEditingFileId(null);
-      setSelectedTags([]);
-
-      console.log('Document tags updated successfully in Dify');
+      setEditingMetadata({});
+      showToast('メタデータを保存しました', 'success');
     } catch (error: any) {
-      console.error('Failed to update document tags in Dify:', error);
-      alert(`タグの保存に失敗しました: ${error.message || '不明なエラー'}`);
+      console.error('Failed to update metadata:', error);
+      showToast(`保存に失敗しました: ${error.message || '不明なエラー'}`, 'error');
     } finally {
-      setIsSavingTags(false);
+      setIsSavingMetadata(false);
     }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingFileId(null);
+    setEditingMetadata({});
+  };
+
+  // client_categoryの選択肢を取得
+  const getClientCategoryOptions = (sector?: string): string[] => {
+    if (!sector) return [];
+    if (sector === '公共') return [...METADATA_OPTIONS.client_category['公共']];
+    if (sector === '民間') return [...METADATA_OPTIONS.client_category['民間']];
+    return [];
   };
 
   const formatFileSize = (bytes: number): string => {
@@ -325,24 +234,40 @@ export default function FileManagement() {
     return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
   };
 
+  // メタデータ表示用のラベル
+  const renderMetadataLabels = (metadata: DocumentMetadata) => {
+    const labels = [];
+    if (metadata.sector) labels.push(metadata.sector);
+    if (metadata.business_type) labels.push(metadata.business_type);
+    if (metadata.client_category) labels.push(metadata.client_category);
+
+    if (labels.length === 0) {
+      return <span className="text-xs text-gray-400">メタデータ未設定</span>;
+    }
+
+    return (
+      <div className="flex flex-wrap gap-1">
+        {labels.map((label, index) => (
+          <span
+            key={index}
+            className="px-2 py-0.5 text-xs bg-gray-100 text-gray-700 rounded"
+          >
+            {label}
+          </span>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8 flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold text-gray-900 mb-2">
-            ファイル管理
-          </h1>
-          <p className="text-sm text-gray-600">
-            事例データファイルのアップロードと管理を行います
-          </p>
-        </div>
-        <button
-          type="button"
-          onClick={() => setIsTagManagementOpen(true)}
-          className="px-4 py-2 bg-gray-600 text-white text-sm rounded hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-        >
-          タグ管理
-        </button>
+      <div className="mb-8">
+        <h1 className="text-2xl font-semibold text-gray-900 mb-2">
+          ファイル管理
+        </h1>
+        <p className="text-sm text-gray-600">
+          事例データファイルのアップロードと管理を行います
+        </p>
       </div>
 
       {/* Upload Area */}
@@ -428,170 +353,146 @@ export default function FileManagement() {
         ) : (
           <div className="divide-y divide-gray-200">
             {files.map((file) => (
-            <div key={file.id} className="px-6 py-4 hover:bg-gray-50">
-              <div className="flex items-start justify-between">
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-sm font-medium text-gray-900 mb-2">
-                    {file.name}
-                  </h3>
+              <div key={file.id} className="px-6 py-4 hover:bg-gray-50">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-sm font-medium text-gray-900 mb-2">
+                      {file.name}
+                    </h3>
 
-                  <div className="flex items-center text-xs text-gray-500 mb-3">
-                    <span>{file.uploadDate.toLocaleDateString('ja-JP')}</span>
-                    <span className="mx-2">•</span>
-                    <span>{formatFileSize(file.size)}</span>
-                  </div>
+                    <div className="flex items-center text-xs text-gray-500 mb-3">
+                      <span>{file.uploadDate.toLocaleDateString('ja-JP')}</span>
+                      <span className="mx-2">•</span>
+                      <span>{formatFileSize(file.size)}</span>
+                    </div>
 
-                  {editingFileId === file.id ? (
-                    <div className="mb-3 p-3 bg-gray-50 rounded border border-gray-200">
-                      <p className="text-xs font-medium text-gray-700 mb-2">
-                        タグを選択してください
-                      </p>
-                      <div className="flex flex-wrap gap-2 mb-3">
-                        {tags.map((tag) => (
+                    {editingFileId === file.id ? (
+                      <div className="mb-3 p-4 bg-gray-50 rounded border border-gray-200">
+                        <div className="space-y-3">
+                          {/* セクター */}
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 mb-1">
+                              セクター
+                            </label>
+                            <select
+                              value={editingMetadata.sector || ''}
+                              onChange={(e) => {
+                                setEditingMetadata(prev => ({
+                                  ...prev,
+                                  sector: e.target.value || undefined,
+                                  client_category: undefined, // セクター変更時にクライアント種別をリセット
+                                }));
+                              }}
+                              className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-gray-400"
+                            >
+                              <option value="">選択してください</option>
+                              {METADATA_OPTIONS.sector.map(option => (
+                                <option key={option} value={option}>{option}</option>
+                              ))}
+                            </select>
+                          </div>
+
+                          {/* 業務種別 */}
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 mb-1">
+                              業務種別
+                            </label>
+                            <select
+                              value={editingMetadata.business_type || ''}
+                              onChange={(e) => setEditingMetadata(prev => ({
+                                ...prev,
+                                business_type: e.target.value || undefined,
+                              }))}
+                              className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-gray-400"
+                            >
+                              <option value="">選択してください</option>
+                              {METADATA_OPTIONS.business_type.map(option => (
+                                <option key={option} value={option}>{option}</option>
+                              ))}
+                            </select>
+                          </div>
+
+                          {/* クライアント種別 */}
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 mb-1">
+                              クライアント種別
+                            </label>
+                            <select
+                              value={editingMetadata.client_category || ''}
+                              onChange={(e) => setEditingMetadata(prev => ({
+                                ...prev,
+                                client_category: e.target.value || undefined,
+                              }))}
+                              disabled={!editingMetadata.sector}
+                              className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-gray-400 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                            >
+                              <option value="">
+                                {editingMetadata.sector ? '選択してください' : 'セクターを先に選択してください'}
+                              </option>
+                              {getClientCategoryOptions(editingMetadata.sector).map(option => (
+                                <option key={option} value={option}>{option}</option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
+
+                        <div className="flex space-x-2 mt-4">
                           <button
-                            key={tag.id}
                             type="button"
-                            onClick={() => handleToggleTag(tag.name)}
-                            className={`px-3 py-1 text-xs rounded border transition-colors ${
-                              selectedTags.includes(tag.name)
-                                ? 'bg-gray-900 border-gray-900 text-white'
-                                : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
-                            }`}
+                            onClick={handleSaveMetadata}
+                            disabled={isSavingMetadata}
+                            className="px-3 py-1.5 bg-gray-900 text-white text-xs rounded hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed"
                           >
-                            #{tag.name}
+                            {isSavingMetadata ? '保存中...' : '保存'}
                           </button>
-                        ))}
+                          <button
+                            type="button"
+                            onClick={handleCancelEdit}
+                            disabled={isSavingMetadata}
+                            className="px-3 py-1.5 bg-gray-200 text-gray-700 text-xs rounded hover:bg-gray-300 disabled:opacity-50"
+                          >
+                            キャンセル
+                          </button>
+                        </div>
                       </div>
-                      <div className="flex space-x-2">
-                        <button
-                          type="button"
-                          onClick={handleSaveFileTags}
-                          disabled={isSavingTags}
-                          className="px-3 py-1 bg-gray-900 text-white text-xs rounded hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed min-w-[60px]"
-                        >
-                          {isSavingTags ? '保存中...' : '保存'}
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setEditingFileId(null)}
-                          disabled={isSavingTags}
-                          className="px-3 py-1 bg-gray-200 text-gray-700 text-xs rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                          キャンセル
-                        </button>
+                    ) : (
+                      <div className="mb-3">
+                        {renderMetadataLabels(file.metadata)}
                       </div>
-                    </div>
-                  ) : (
-                    <div className="flex flex-wrap gap-1 mb-3">
-                      {file.tags.map((tagName, index) => (
-                        <TagBadge key={index} tag={tagName} />
-                      ))}
-                    </div>
-                  )}
+                    )}
 
-                  <div className="flex items-center space-x-2">
-                    <button
-                      type="button"
-                      onClick={() => handleEditFileTags(file.id)}
-                      className="text-xs text-gray-700 hover:text-gray-900 font-medium"
-                    >
-                      タグ編集
-                    </button>
-                    <span className="text-gray-300">|</span>
-                    <button
-                      type="button"
-                      className="text-xs text-gray-600 hover:text-gray-800"
-                    >
-                      ダウンロード
-                    </button>
+                    <div className="flex items-center space-x-2">
+                      <button
+                        type="button"
+                        onClick={() => handleEditMetadata(file.id)}
+                        className="text-xs text-gray-700 hover:text-gray-900 font-medium"
+                      >
+                        メタデータ編集
+                      </button>
+                      <span className="text-gray-300">|</span>
+                      <button
+                        type="button"
+                        className="text-xs text-gray-600 hover:text-gray-800"
+                      >
+                        ダウンロード
+                      </button>
+                    </div>
                   </div>
-                </div>
 
-                <button
-                  type="button"
-                  onClick={() => handleDeleteClick(file.id)}
-                  disabled={isDeleting && deletingFileId === file.id}
-                  className="ml-4 text-sm text-red-600 hover:text-red-800 font-medium disabled:text-red-300 disabled:cursor-not-allowed"
-                >
-                  {isDeleting && deletingFileId === file.id ? '削除中...' : '削除'}
-                </button>
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteClick(file.id)}
+                    disabled={isDeleting && deletingFileId === file.id}
+                    className="ml-4 text-sm text-red-600 hover:text-red-800 font-medium disabled:text-red-300 disabled:cursor-not-allowed"
+                  >
+                    {isDeleting && deletingFileId === file.id ? '削除中...' : '削除'}
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
           </div>
         )}
       </div>
-
-      {/* Tag Management Modal */}
-      <Modal
-        isOpen={isTagManagementOpen}
-        onClose={() => setIsTagManagementOpen(false)}
-        title="タグ管理"
-      >
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              新しいタグを追加
-            </label>
-            <div className="flex space-x-2">
-              <input
-                type="text"
-                value={newTagName}
-                onChange={(e) => setNewTagName(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && !isCreatingTag && handleAddTag()}
-                disabled={isCreatingTag}
-                placeholder="タグ名を入力（例: 公共、DX）"
-                className="flex-1 px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
-              />
-              <button
-                type="button"
-                onClick={handleAddTag}
-                disabled={isCreatingTag}
-                className="px-4 py-2 bg-gray-900 text-white text-sm rounded hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed min-w-[60px]"
-              >
-                {isCreatingTag ? '作成中...' : '追加'}
-              </button>
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              登録済みタグ（{tags.length}件）
-            </label>
-            {isLoadingTags ? (
-              <div className="flex justify-center items-center py-8 border border-gray-200 rounded bg-gray-50">
-                <div className="text-sm text-gray-500">
-                  <div className="animate-pulse">Difyからタグを読み込んでいます...</div>
-                </div>
-              </div>
-            ) : tags.length === 0 ? (
-              <p className="text-sm text-gray-500 text-center py-8 border border-gray-200 rounded bg-gray-50">
-                タグがありません。新しいタグを追加してください。
-              </p>
-            ) : (
-              <div className="flex flex-wrap gap-2 max-h-64 overflow-y-auto p-2 border border-gray-200 rounded bg-gray-50">
-                {tags.map((tag) => (
-                  <TagBadge
-                    key={tag.id}
-                    tag={tag.name}
-                    onRemove={() => handleDeleteTag(tag.id)}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
-
-          <div className="flex justify-end pt-2">
-            <button
-              type="button"
-              onClick={() => setIsTagManagementOpen(false)}
-              className="px-4 py-2 bg-gray-200 text-gray-700 text-sm rounded hover:bg-gray-300"
-            >
-              閉じる
-            </button>
-          </div>
-        </div>
-      </Modal>
 
       {/* Delete Confirmation Modal */}
       <Modal

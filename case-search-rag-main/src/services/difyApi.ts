@@ -9,10 +9,6 @@ const DIFY_API_KEY = import.meta.env.VITE_DIFY_API_KEY || '';
 const DIFY_CHAT_API_KEY = import.meta.env.VITE_DIFY_CHAT_API_KEY || '';
 const DIFY_CHAT_USER = import.meta.env.VITE_DIFY_CHAT_USER || 'default-user';
 
-export interface DifyTagMetadata {
-  type: string;
-  name: string;
-}
 
 export interface DifyMetadataField {
   id: string;
@@ -160,72 +156,8 @@ export interface DifyEnhancedChatResponse extends DifyChatResponse {
 }
 
 /**
- * Creates a new tag in Dify dataset metadata
- * @param tagName - The name of the tag to create
- * @returns Promise that resolves when tag is created
- * @throws DifyApiError if the API call fails
- */
-export async function createDifyTag(tagName: string): Promise<void> {
-  if (!DIFY_API_KEY) {
-    throw new Error('Dify API key is not configured. Please set VITE_DIFY_API_KEY in your .env file.');
-  }
-
-  if (!DIFY_DATASET_ID) {
-    throw new Error('Dify dataset ID is not configured. Please set VITE_DIFY_DATASET_ID in your .env file.');
-  }
-
-  const url = `${DIFY_API_BASE_URL}/datasets/${DIFY_DATASET_ID}/metadata`;
-
-  const payload: DifyTagMetadata = {
-    type: 'string',
-    name: tagName,
-  };
-
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${DIFY_API_KEY}`,
-      },
-      body: JSON.stringify(payload),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      let errorMessage = `Failed to create tag in Dify: ${response.statusText}`;
-
-      try {
-        const errorJson = JSON.parse(errorText);
-        errorMessage = errorJson.message || errorMessage;
-      } catch {
-        // If error is not JSON, use the text or default message
-        errorMessage = errorText || errorMessage;
-      }
-
-      throw {
-        message: errorMessage,
-        status: response.status,
-      } as DifyApiError;
-    }
-
-    // Success - API returned 200/201
-    return;
-  } catch (error) {
-    if ((error as DifyApiError).message) {
-      throw error;
-    }
-
-    // Network or other errors
-    throw {
-      message: error instanceof Error ? error.message : 'An unknown error occurred',
-    } as DifyApiError;
-  }
-}
-
-/**
- * Fetches all tags (metadata fields) from Dify dataset
- * @returns Promise that resolves with array of metadata fields
+ * Fetches metadata fields (tags) from Dify dataset
+ * @returns Promise that resolves with metadata fields
  * @throws DifyApiError if the API call fails
  */
 export async function fetchDifyTags(): Promise<DifyMetadataField[]> {
@@ -249,7 +181,7 @@ export async function fetchDifyTags(): Promise<DifyMetadataField[]> {
 
     if (!response.ok) {
       const errorText = await response.text();
-      let errorMessage = `Failed to fetch tags from Dify: ${response.statusText}`;
+      let errorMessage = `Failed to fetch metadata from Dify: ${response.statusText}`;
 
       try {
         const errorJson = JSON.parse(errorText);
@@ -265,17 +197,15 @@ export async function fetchDifyTags(): Promise<DifyMetadataField[]> {
     }
 
     const data: DifyMetadataResponse = await response.json();
-    console.log('Dify API Response:', data);
+    console.log('Dify Metadata Response:', data);
 
-    // Return the doc_metadata array
     return data.doc_metadata || [];
   } catch (error) {
     if ((error as DifyApiError).message) {
       throw error;
     }
 
-    // Network or other errors
-    console.error('Error fetching tags from Dify:', error);
+    console.error('Error fetching metadata from Dify:', error);
     throw {
       message: error instanceof Error ? error.message : 'An unknown error occurred',
     } as DifyApiError;
@@ -342,14 +272,21 @@ export async function fetchDifyDocuments(page: number = 1, limit: number = 100):
   }
 }
 
+// メタデータ更新用のペイロード型
+export interface DocumentMetadataPayload {
+  sector?: string;
+  business_type?: string;
+  client_category?: string;
+}
+
 /**
- * Updates document metadata (tags) in Dify
+ * Updates document metadata in Dify
  * @param documentId - The ID of the document to update
- * @param tags - Array of tag names to assign to the document
+ * @param metadata - Metadata fields to update (sector, business_type, client_category)
  * @returns Promise that resolves when metadata is updated
  * @throws DifyApiError if the API call fails
  */
-export async function updateDocumentMetadata(documentId: string, tags: string[]): Promise<void> {
+export async function updateDocumentMetadata(documentId: string, metadata: DocumentMetadataPayload): Promise<void> {
   if (!DIFY_API_KEY) {
     throw new Error('Dify API key is not configured. Please set VITE_DIFY_API_KEY in your .env file.');
   }
@@ -359,26 +296,36 @@ export async function updateDocumentMetadata(documentId: string, tags: string[])
   }
 
   console.log('=== Updating document metadata ===');
-  console.log('API Base URL:', DIFY_API_BASE_URL);
-  console.log('Dataset ID:', DIFY_DATASET_ID);
   console.log('Document ID:', documentId);
-  console.log('Tags to set:', tags);
-  console.log('API Key (first 10 chars):', DIFY_API_KEY.substring(0, 10) + '...');
+  console.log('Metadata to set:', metadata);
 
   try {
-    // Step 1: Fetch all metadata fields from the dataset
-    console.log('Step 1: Fetching all metadata fields...');
-    const metadataFields = await fetchDifyTags();
-    console.log('Metadata fields:', metadataFields);
+    // Step 1: Fetch all metadata fields from the dataset to get field IDs
+    const metadataFieldsResponse = await fetch(
+      `${DIFY_API_BASE_URL}/datasets/${DIFY_DATASET_ID}/metadata`,
+      {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${DIFY_API_KEY}`,
+        },
+      }
+    );
 
-    // Step 2: Build metadata list for the document
-    // Include ALL metadata field IDs, set value for tags to keep, empty string for tags to remove
+    if (!metadataFieldsResponse.ok) {
+      throw new Error('Failed to fetch metadata fields');
+    }
+
+    const fieldsData: DifyMetadataResponse = await metadataFieldsResponse.json();
+    const metadataFields = fieldsData.doc_metadata || [];
+    console.log('Available metadata fields:', metadataFields);
+
+    // Step 2: Build metadata list with field IDs and values
     const metadataList = metadataFields.map(field => {
-      const shouldKeep = tags.includes(field.name);
+      const value = metadata[field.name as keyof DocumentMetadataPayload] || '';
       return {
         id: field.id,
         name: field.name,
-        value: shouldKeep ? field.name : '',
+        value: value,
       };
     });
 
@@ -396,10 +343,6 @@ export async function updateDocumentMetadata(documentId: string, tags: string[])
       ],
     };
 
-    console.log('Full URL:', url);
-    console.log('Payload:', JSON.stringify(payload, null, 2));
-    console.log('Sending POST request...');
-
     const response = await fetch(url, {
       method: 'POST',
       headers: {
@@ -409,21 +352,14 @@ export async function updateDocumentMetadata(documentId: string, tags: string[])
       body: JSON.stringify(payload),
     });
 
-    console.log('Response received. Status:', response.status);
-    console.log('Response status text:', response.statusText);
-    console.log('Response headers:', Array.from(response.headers.entries()));
-
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('Error response body:', errorText);
-      let errorMessage = `Failed to update document metadata in Dify: ${response.statusText}`;
+      let errorMessage = `Failed to update document metadata: ${response.statusText}`;
 
       try {
         const errorJson = JSON.parse(errorText);
-        console.error('Parsed error JSON:', errorJson);
         errorMessage = errorJson.message || errorMessage;
       } catch {
-        console.error('Could not parse error response as JSON');
         errorMessage = errorText || errorMessage;
       }
 
@@ -433,26 +369,18 @@ export async function updateDocumentMetadata(documentId: string, tags: string[])
       } as DifyApiError;
     }
 
-    const responseBody = await response.text();
-    console.log('Success response body:', responseBody);
     console.log('Document metadata updated successfully');
-    // Success
     return;
   } catch (error) {
-    console.error('=== Error in updateDocumentMetadata ===');
-    console.error('Error type:', error?.constructor?.name);
-    console.error('Error message:', error instanceof Error ? error.message : String(error));
-    console.error('Full error object:', error);
+    console.error('Error in updateDocumentMetadata:', error);
 
     if ((error as DifyApiError).message) {
       throw error;
     }
 
-    // Network errors (like CORS, connection refused, etc.)
     if (error instanceof TypeError) {
-      console.error('TypeError detected - likely a network/CORS issue');
       throw {
-        message: `ネットワークエラー: ${error.message}. API への接続を確認してください。CORSエラーの可能性があります。`,
+        message: `ネットワークエラー: ${error.message}`,
       } as DifyApiError;
     }
 
