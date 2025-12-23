@@ -53,3 +53,25 @@ export interface GeminiFinding {
   text: string;
   reason: string;
 }
+
+export interface OkWord {
+  id?: string;
+  word: string;
+  reason: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+// Detection型の拡張（OKワード除外情報）
+export interface ExcludedDetection extends Detection {
+  excluded: true;
+  excludedBy: OkWord;
+}
+
+// 検出結果の統合型
+export type DetectionWithExclusion = Detection | ExcludedDetection;
+
+// 型ガード
+export const isExcludedDetection = (detection: DetectionWithExclusion): detection is ExcludedDetection => {
+  return 'excluded' in detection && detection.excluded === true;
+};
