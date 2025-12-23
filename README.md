@@ -1,6 +1,6 @@
 ● # G-MAI
 
-  **Gode Wide Valley Method AI** - ビジネスを加速させる生成AIプラットフォーム
+  **Gold Wide Valley Method AI** - ビジネスを加速させる生成AIプラットフォーム
 
   ## サービス一覧
 
