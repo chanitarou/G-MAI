@@ -20,7 +20,14 @@ export default function GenerateFlow() {
     // ストリーミングで受け取るdrawioコードを保持する。
     const [drawioContent, setDrawioContent] = useState('');
     // API呼び出しで使用するフローID（UUID）を一度だけ生成する。
-    const [flowId] = useState(() => (typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : 'flow-' + Math.random().toString(36).slice(2)));
+    // ハイドレーションエラー回避のため、クライアント側でのみ生成する。
+    const [flowId, setFlowId] = useState('');
+    useEffect(() => {
+        if (!flowId) {
+            const id = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : 'flow-' + Math.random().toString(36).slice(2);
+            setFlowId(id);
+        }
+    }, [flowId]);
     // 添付ファイルを管理する。
     const [attachments, setAttachments] = useState<AttachmentItem[]>([]);
 

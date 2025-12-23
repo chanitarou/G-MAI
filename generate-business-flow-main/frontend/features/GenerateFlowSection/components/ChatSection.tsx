@@ -25,14 +25,30 @@ export function ChatSection({
     attachments,
     onAttachmentsChange
 }: ChatSectionProps) {
+    // ハイドレーションエラー回避のため、初期メッセージのsentAtは空文字で初期化し、useEffectで設定する。
     const [messages, setMessages] = useState<ChatMessage[]>([
         {
             id: 'system-initial',
             role: 'system',
             content: '生成したい業務フローに関連するファイルを添付し、指示を入力してください。',
-            sentAt: new Date().toISOString()
+            sentAt: ''
         }
     ]);
+    const [isClient, setIsClient] = useState(false);
+
+    // クライアント側でのみ初期メッセージのsentAtを設定する。
+    useEffect(() => {
+        if (!isClient) {
+            setIsClient(true);
+            setMessages((prev) =>
+                prev.map((msg) =>
+                    msg.id === 'system-initial' && !msg.sentAt
+                        ? { ...msg, sentAt: new Date().toISOString() }
+                        : msg
+                )
+            );
+        }
+    }, [isClient]);
     const [showHint, setShowHint] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
 
